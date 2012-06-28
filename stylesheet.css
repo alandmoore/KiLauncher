@@ -1,0 +1,4 @@
+LauncherMenu { background-color: qlineargradient(x1:0,y1:0, x2:1, y2:1, stop:0 #33A, stop:1 #63A); border-color: black; border-width: 2px; }
+LaunchButton { background-color: #888; }
+LaunchButton:hover { background-color: #AAA; }
+LaunchButton:pressed { background-color: #666; }

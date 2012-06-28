@@ -1,0 +1,32 @@
+============
+ KiLauncher
+============
+
+----------------------
+A full-screen launcher
+----------------------
+
+Abstract
+========
+
+KiLauncher is a static full-screen launcher menu.  It features:
+
+- Themeable appearance using (a subset of) CSS
+- Static configuration
+- Plaintext YAML configuration file
+- Support for XDG .desktop launcher files
+
+KiLauncher is aimed at situations where you want to provide a user with a simple, limited interface to an explicit set of applications.  It's possibly useful for:
+
+- Kiosks (hence the name), CyberCafe, or other publicly-accessible computers
+- Computers for children or computer novices who just want to launch a few programs easily
+- Call centers, labs, POS systems, or other "locked down" workstations
+
+What KiLauncher is NOT
+~~~~~~~~~~~~~~~~~~~~~~
+
+- It's not a desktop environment, window manager, task manager, or desktop shell.  Just a launcher.
+- It's not a total lockdown solution.  You still need to address the lockdown of your desktop, launched programs, etc.
+- It's not a dynamically-updating menu replacement that will automagically configure new launchers for you.
+- It's not tested on platforms other than GNU/Linux on a regular basis.
+
