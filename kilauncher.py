@@ -11,14 +11,16 @@ from xdg.DesktopEntry import DesktopEntry
 import sys
 import subprocess
 import glob
-
+import yaml
+import os
 
 class LaunchButton(QPushButton):
 
     def __init__(self, parent=None, **kwargs):
         super(LaunchButton, self).__init__(parent)
-        if kwargs.get("desktopfile"):
-            de = DesktopEntry(kwargs.get("desktopfile"))
+        self.launcher_size = kwargs.get("launcher_size")
+        if kwargs.get("desktop_file"):
+            de = DesktopEntry(kwargs.get("desktop_file"))
             self.name = de.getName()
             self.comment = de.getComment()
             self.icon = de.getIcon()
@@ -42,31 +44,42 @@ class LaunchButton(QPushButton):
         w = QWidget()
         w.setLayout(leftlayout)
         i = QLabel()
-        i.setPixmap(QIcon.fromTheme(self.icon).pixmap(64,64))
+        # If the icon is a filename, attempt to load directly.  Otherwise, load from theme.
+        icon = (os.path.isfile(self.icon) and QIcon(self.icon)) or QIcon.fromTheme(self.icon)
+        i.setPixmap(icon.pixmap(64,64))
         toplayout.addWidget(i)
         toplayout.addWidget(w)
         self.setLayout(toplayout)
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        self.setMinimumSize(QSize(240, 80))
+        self.setMinimumSize(QSize(*self.launcher_size))
 
         self.connect(self, SIGNAL("clicked()"), self.callback)
 
     def callback(self):
-        subprocess.call([self.command])
+        subprocess.call(self.command.split())
 
 class LauncherMenu(QWidget):
-
-    def __init__(self, parent=None):
+    """This is a single pane of launchers on a tab"""
+    def __init__(self, config, parent=None):
         super(LauncherMenu, self).__init__(parent)
-        self.setWindowState(Qt.WindowFullScreen)
         self.layout = QGridLayout()
         self.setLayout(self.layout)
-        self.columns = 5
+        self.columns = config.get("launchers_per_row", 5)
+        self.launcher_size = (config.get("launcher_size") and [int(x) for x in config.get("launcher_size").split('x')]) or [240, 80]
         self.current_coordinates = [0, 0]
-        
-    def add_launcher_from_xdg_file(self, desktop_file):
-        b = LaunchButton(desktopfile=desktop_file)
-        self.add_launcher_to_layout(b)
+        self.config = config
+        if self.config.get("desktop_path"):
+            self.add_launchers_from_path(self.config.get("desktop_path"))
+        if self.config.get("launchers"):
+            for launcher in self.config.get("launchers"):
+                launcher["launcher_size"] = self.launcher_size
+                b = LaunchButton(**launcher)
+                self.add_launcher_to_layout(b)
+                
+    def add_launchers_from_path(self, path):
+        for desktop_file in glob.glob(path):
+            b = LaunchButton(desktop_file=desktop_file, launcher_size=self.launcher_size)
+            self.add_launcher_to_layout(b)
 
     def add_launcher_to_layout(self, launcher):
         self.layout.addWidget(launcher, self.current_coordinates[0], self.current_coordinates[1])
@@ -75,11 +88,37 @@ class LauncherMenu(QWidget):
             self.current_coordinates[1] = 0
             self.current_coordinates[0] += 1
 
+
+class KiLauncher(QTabWidget):
+    """This is the main appliation"""
+
+    def __init__(self, config, parent=None):
+        super(KiLauncher, self).__init__(parent)
+        self.stylesheet = config.get("stylesheet", 'stylesheet.css')
+        self.setWindowState(Qt.WindowFullScreen)
+
+        # Setup the appearance
+        if self.stylesheet:
+            self.setStyleSheet(open(self.stylesheet, 'r').read())
+        if config.get("icon_theme"):
+            QIcon.setThemeName(config.get("icon_theme"))
+
+        # Set up the tabs    
+        self.tabs = config.get("tabs_and_launchers")
+        if self.tabs:
+            self.init_tabs()
+        else:
+            self.setLayout(QHBoxLayout())
+            self.layout().addWidget(QLabel("No tabs were configured.  Please check your configuration file."))
+
+    def init_tabs(self):
+        for tabname, launchers in self.tabs.iteritems():
+            lm = LauncherMenu(launchers)
+            self.addTab(lm, tabname)
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    l = LauncherMenu()
-    l.setStyleSheet(open("stylesheet.css", 'r').read())
-    for d in glob.glob("/usr/share/applications/s*.desktop"):
-        l.add_launcher_from_xdg_file(d)
+    config = yaml.safe_load(open('kilauncher.yaml', 'r'))
+    l = KiLauncher(config)
     l.show()
     app.exec_()

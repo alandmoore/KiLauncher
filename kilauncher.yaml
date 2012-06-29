@@ -1,0 +1,66 @@
+# kilauncher.yaml
+# This is a sample configuration file for KiLauncher.py
+# Edit it to fit your needs.
+
+########################
+# Global Configuration #
+########################
+
+# These values affect the whole application
+
+# Stylesheet
+# Change this to use a custom stylesheet, or change the location of your stylesheet
+# Default: stylesheet.css
+
+stylesheet: "stylesheet.css"
+
+# Icon Theme
+# Change the icon theme used for launcher icons when only an icon name (not path) is specified
+# Probably only works in Linux, according to QT documentation
+# Default: whatever your qt is configured to use
+
+icon_theme: "oxygen"
+
+
+######################
+# Tabs and Launchers #
+######################
+
+# This nested structure defines tabs and the launchers contained within
+# NOTE that this config may not work on your system if you don't have these programs installed.
+
+tabs_and_launchers:
+  # This is a tab called "Web"
+  "Web": 
+    # For this tab, create a list of launchers.
+    launchers:
+    # Launchers can be spelled out explicity by specifying name, comment, icon, and command
+    -
+      name: "Chromium Web Browser"
+      comment: "Access the Internet"
+      icon: "chromium-browser"
+      command: "chromium-browser"
+    
+    - 
+      name: "Ping Debian.org"
+      comment: "Check if it's alive and well"
+      icon: "/usr/share/pixmaps/debian-logo.png"
+      command: "xterm -e ping www.debian.org"
+    # Alternately, if you have a .desktop file for the application, specify it (and only it)
+    - 
+      desktop_file: "/usr/share/applications/firefox.desktop"
+
+  # Here's a second tab, that will hold all programs on the system starting with 'A'
+  "Programs that start with 'A'": 
+    # Note the absence of the hyphen.  This is a property of the tab itself, not part of a launchers array.
+    # Also note the use of the wildcard character in the name.  That's allowed.
+    desktop_path: "/usr/share/applications/a*.desktop"
+   
+    # Tabs can also specify the maximum number of launchers in a row,
+    # and the size of the launchers
+    # Default is 5 launchers at 200 x 80
+    launchers_per_row: 6
+    launcher_size: 180x120
+
+
+
