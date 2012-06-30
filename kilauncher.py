@@ -19,6 +19,7 @@ class LaunchButton(QPushButton):
     
     def __init__(self, parent=None, **kwargs):
         super(LaunchButton, self).__init__(parent)
+        self.setObjectName("LaunchButton")
         self.launcher_size = kwargs.get("launcher_size")
         self.icon_size = kwargs.get("icon_size")
         if kwargs.get("desktop_file"):
@@ -36,12 +37,12 @@ class LaunchButton(QPushButton):
         toplayout = QHBoxLayout()
         leftlayout = QVBoxLayout()
         title = QLabel(self.name)
-        title.setStyleSheet("font-weight: bold; font-size: 10pt; text-decoration: underline")
+        title.setObjectName("LaunchButtonTitle")
         leftlayout.addWidget(title)
         comment = QLabel(self.comment)
         comment.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         comment.setWordWrap(True)
-        comment.setStyleSheet("font-weight: normal; font-size: 8pt;")
+        comment.setObjectName("LaunchButtonDescription")
         leftlayout.addWidget(comment)
         textpane = QWidget()
         textpane.setLayout(leftlayout)
@@ -68,11 +69,14 @@ class LauncherMenu(QWidget):
         self.launcherlayout = QGridLayout()
         self.layout = QVBoxLayout()
         # Show the description
-        self.layout.addWidget(QLabel(self.config.get("description")))
+        self.descriptionLabel = QLabel(self.config.get("description"))
+        self.descriptionLabel.setObjectName("TabDescription")
+        self.layout.addWidget(self.descriptionLabel)
         self.scroller = QScrollArea()
         self.scroller.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scroller.setWidgetResizable(True)
         self.launcher_widget = QWidget(self)
+        self.launcher_widget.setObjectName("LauncherPane")
         self.launcher_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.launcher_widget.setLayout(self.launcherlayout)
         self.layout.addWidget(self.scroller)
@@ -110,6 +114,8 @@ class KiLauncher(QTabWidget):
 
     def __init__(self, config, parent=None):
         super(KiLauncher, self).__init__(parent)
+        self.setObjectName("KiLauncher")
+        self.tabBar().setObjectName("TabBar")
         self.stylesheet = config.get("stylesheet", 'stylesheet.css')
         self.setWindowState(Qt.WindowFullScreen)
 
