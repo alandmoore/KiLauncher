@@ -15,10 +15,12 @@ import yaml
 import os
 
 class LaunchButton(QPushButton):
-
+    """This is the actual button you push to launch the program."""
+    
     def __init__(self, parent=None, **kwargs):
         super(LaunchButton, self).__init__(parent)
         self.launcher_size = kwargs.get("launcher_size")
+        self.icon_size = kwargs.get("icon_size")
         if kwargs.get("desktop_file"):
             de = DesktopEntry(kwargs.get("desktop_file"))
             self.name = de.getName()
@@ -33,22 +35,22 @@ class LaunchButton(QPushButton):
             
         toplayout = QHBoxLayout()
         leftlayout = QVBoxLayout()
-        t = QLabel(self.name)
-        t.setStyleSheet("font-weight: bold; font-size: 10pt; text-decoration: underline")
-        leftlayout.addWidget(t)
-        c = QLabel(self.comment)
-        c.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        c.setWordWrap(True)
-        c.setStyleSheet("font-weight: normal; font-size: 8pt;")
-        leftlayout.addWidget(c)
-        w = QWidget()
-        w.setLayout(leftlayout)
-        i = QLabel()
+        title = QLabel(self.name)
+        title.setStyleSheet("font-weight: bold; font-size: 10pt; text-decoration: underline")
+        leftlayout.addWidget(title)
+        comment = QLabel(self.comment)
+        comment.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        comment.setWordWrap(True)
+        comment.setStyleSheet("font-weight: normal; font-size: 8pt;")
+        leftlayout.addWidget(comment)
+        textpane = QWidget()
+        textpane.setLayout(leftlayout)
+        iconpane = QLabel()
         # If the icon is a filename, attempt to load directly.  Otherwise, load from theme.
         icon = (os.path.isfile(self.icon) and QIcon(self.icon)) or QIcon.fromTheme(self.icon)
-        i.setPixmap(icon.pixmap(64,64))
-        toplayout.addWidget(i)
-        toplayout.addWidget(w)
+        iconpane.setPixmap(icon.pixmap(*self.icon_size))
+        toplayout.addWidget(iconpane)
+        toplayout.addWidget(textpane)
         self.setLayout(toplayout)
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.setMinimumSize(QSize(*self.launcher_size))
@@ -62,27 +64,41 @@ class LauncherMenu(QWidget):
     """This is a single pane of launchers on a tab"""
     def __init__(self, config, parent=None):
         super(LauncherMenu, self).__init__(parent)
-        self.layout = QGridLayout()
+        self.config = config
+        self.launcherlayout = QGridLayout()
+        self.layout = QVBoxLayout()
+        # Show the description
+        self.layout.addWidget(QLabel(self.config.get("description")))
+        self.scroller = QScrollArea()
+        self.scroller.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scroller.setWidgetResizable(True)
+        self.launcher_widget = QWidget(self)
+        self.launcher_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.launcher_widget.setLayout(self.launcherlayout)
+        self.layout.addWidget(self.scroller)
         self.setLayout(self.layout)
         self.columns = config.get("launchers_per_row", 5)
         self.launcher_size = (config.get("launcher_size") and [int(x) for x in config.get("launcher_size").split('x')]) or [240, 80]
+        self.icon_size = (config.get("icon_size") and [int(x) for x in config.get("icon_size").split('x')]) or [64, 64]
         self.current_coordinates = [0, 0]
-        self.config = config
         if self.config.get("desktop_path"):
             self.add_launchers_from_path(self.config.get("desktop_path"))
         if self.config.get("launchers"):
             for launcher in self.config.get("launchers"):
                 launcher["launcher_size"] = self.launcher_size
+                launcher["icon_size"] = self.icon_size
                 b = LaunchButton(**launcher)
                 self.add_launcher_to_layout(b)
-                
+        self.scroller.setWidget(self.launcher_widget)
+
+
     def add_launchers_from_path(self, path):
         for desktop_file in glob.glob(path):
-            b = LaunchButton(desktop_file=desktop_file, launcher_size=self.launcher_size)
+            b = LaunchButton(desktop_file=desktop_file, launcher_size=self.launcher_size, icon_size=self.icon_size)
             self.add_launcher_to_layout(b)
 
     def add_launcher_to_layout(self, launcher):
-        self.layout.addWidget(launcher, self.current_coordinates[0], self.current_coordinates[1])
+        self.launcherlayout.addWidget(launcher, self.current_coordinates[0], self.current_coordinates[1])
         self.current_coordinates[1] += 1
         if self.current_coordinates[1] % self.columns == 0:
             self.current_coordinates[1] = 0
@@ -112,9 +128,9 @@ class KiLauncher(QTabWidget):
             self.layout().addWidget(QLabel("No tabs were configured.  Please check your configuration file."))
 
     def init_tabs(self):
-        for tabname, launchers in self.tabs.iteritems():
+        for tabordinal, launchers in sorted(self.tabs.items()):
             lm = LauncherMenu(launchers)
-            self.addTab(lm, tabname)
+            self.addTab(lm, launchers.get("name"))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

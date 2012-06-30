@@ -19,7 +19,7 @@ stylesheet: "stylesheet.css"
 # Probably only works in Linux, according to QT documentation
 # Default: whatever your qt is configured to use
 
-icon_theme: "oxygen"
+icon_theme: "Tango"
 
 
 ######################
@@ -30,8 +30,12 @@ icon_theme: "oxygen"
 # NOTE that this config may not work on your system if you don't have these programs installed.
 
 tabs_and_launchers:
-  # This is a tab called "Web"
-  "Web": 
+  # This is a tab called "World Wide Web"
+  # It starts with a unique number.  Tabs will be sorted by key, so it will be first
+  1:
+    name: "World Wide Web"
+    #It can have some descriptive text, which will be displayed above the launchers
+    description: "This tab contains programs designed to utilize the World Wide Web."
     # For this tab, create a list of launchers.
     launchers:
     # Launchers can be spelled out explicity by specifying name, comment, icon, and command
@@ -41,26 +45,50 @@ tabs_and_launchers:
       icon: "chromium-browser"
       command: "chromium-browser"
     
+    # You can do terminal commands to, using "xterm -e"
     - 
       name: "Ping Debian.org"
       comment: "Check if it's alive and well"
       icon: "/usr/share/pixmaps/debian-logo.png"
       command: "xterm -e ping www.debian.org"
+
+    # Or send them to a URL in the system-specified browser
+    -
+      name: "Visit awesome website"
+      comment: "The awesomest website of awesome"
+      icon: "web-browser"
+      command: "xdg-open http://www.alandmoore.com/blog"
+
     # Alternately, if you have a .desktop file for the application, specify it (and only it)
     - 
       desktop_file: "/usr/share/applications/firefox.desktop"
 
   # Here's a second tab, that will hold all programs on the system starting with 'A'
-  "Programs that start with 'A'": 
+  2:
+    name: "Programs that start with 'A'"
     # Note the absence of the hyphen.  This is a property of the tab itself, not part of a launchers array.
     # Also note the use of the wildcard character in the name.  That's allowed.
+    # keep in mind, you have no control over the ordering if you go this route.
     desktop_path: "/usr/share/applications/a*.desktop"
    
-    # Tabs can also specify the maximum number of launchers in a row,
-    # and the size of the launchers
+    # Once again, a descriptive comment
+    description: "These are all the programs I could find on your system that begin with the letter A."
+    # Tabs can also specify 
+    #  - the maximum number of launchers in a row,
+    #  - the size of the launchers
+    #  - the size of the icons on the launcher
     # Default is 5 launchers at 200 x 80
+    # Default size of icons is 64x64
+    launchers_per_row: 3
+    launcher_size: 360x120
+    icon_size: 96x72
+
+# The system can work with large lists of programs too, though it seems to defeat the purpose (uncomment these lines to see it)
+
+  3:
+    name: "All your programs"
+    desktop_path: "/usr/share/applications/*.desktop"
+    icon_size: 48x48
     launchers_per_row: 6
-    launcher_size: 180x120
-
-
+    launcher_size: 180x96
 
