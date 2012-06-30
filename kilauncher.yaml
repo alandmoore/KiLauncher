@@ -85,10 +85,10 @@ tabs_and_launchers:
 
 # The system can work with large lists of programs too, though it seems to defeat the purpose (uncomment these lines to see it)
 
-  3:
-    name: "All your programs"
-    desktop_path: "/usr/share/applications/*.desktop"
-    icon_size: 48x48
-    launchers_per_row: 6
-    launcher_size: 180x96
+#  3:
+#    name: "All your programs"
+#    desktop_path: "/usr/share/applications/*.desktop"
+#    icon_size: 48x48
+#    launchers_per_row: 6
+#    launcher_size: 180x96
 
