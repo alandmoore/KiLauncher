@@ -30,3 +30,32 @@ What KiLauncher is NOT
 - It's not a dynamically-updating menu replacement that will automagically configure new launchers for you.
 - It's not tested on platforms other than GNU/Linux on a regular basis.
 
+Requirements
+============
+
+- python
+- pyqt4
+- python-yaml
+- python-xdg
+
+Usage
+=====
+
+The program is still kind of in alpha state, so the exact usage is in flux.  
+
+The kilauncher.yaml file is the configuration file, and is well commented to show how shortcuts can be configured.  Basically, you can give it directories full of .desktop files, individual .desktop files, or explicit name/comment/icon/command values to define launchers for each tab.
+
+The stylesheet.css file is where the style info is kept.  It uses QT Stylesheet code, NOT regular CSS.  It's close, but the former is a subset so not everything works, and some things don't work like you'd expect.
+
+There are no command-line options yet, but it's planned.
+
+
+Contributing
+============
+
+Contributions are welcome, as long as they keep the software developing along the same intended functions.  Some key points:
+
+- the menu needs to remain static and hand-configurable (explicit configuration enables an administrator to control what's launchable)
+- the appearance also needs to be hand-configurable
+- Generally speaking, it needs to be appropriate for a public or locked-down kiosk
+
