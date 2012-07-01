@@ -63,6 +63,13 @@ tabs_and_launchers:
     - 
       desktop_file: "/usr/share/applications/firefox.desktop"
 
+    # Broken buttons will return an error to the user.
+    -
+      name: "Broken"
+      comment: "This button intentionally doesn't work."
+      icon: "broken"
+      command: "/some/nonexistent/command/blah/foo/123124123123"
+
   # Here's a second tab, that will hold all programs on the system starting with 'A'
   2:
     name: "Programs that start with 'A'"

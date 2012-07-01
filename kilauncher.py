@@ -62,8 +62,11 @@ class LaunchButton(QPushButton):
         self.connect(self, SIGNAL("clicked()"), self.callback)
 
     def callback(self):
-        subprocess.call(self.command.split())
-
+        try:
+            subprocess.call(self.command.split())
+        except:
+            QMessageBox.critical(None, "Command Failed!", "Sorry, this program isn't working!")
+            
 class LauncherMenu(QWidget):
     """This is a single pane of launchers on a tab"""
     def __init__(self, config, parent=None):
