@@ -47,7 +47,14 @@ The kilauncher.yaml file is the configuration file, and is well commented to sho
 
 The stylesheet.css file is where the style info is kept.  It uses QT Stylesheet code, NOT regular CSS.  It's close, but the former is a subset so not everything works, and some things don't work like you'd expect.
 
-There are no command-line options yet, but it's planned.
+The current command line options available are: 
+
+============== ===================================
+Switch         Description
+============== ===================================
+-c, --config   Specify a configuration file to use
+============== ===================================
+
 
 
 Contributing

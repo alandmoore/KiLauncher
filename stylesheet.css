@@ -2,51 +2,55 @@
 /* For a reference of supported features, see http://qt-project.org/doc/qt-4.8/stylesheet-reference.html */
 
 /* KiLauncher will style the main application background, etc.  ::pane defines the area under the tabs. */ 
-#KiLauncher { background-color: black; }
+#KiLauncher { background-color: #888; }
 #KiLauncher::pane { 
-                    background-color: #435; 
-                    border: 2px solid silver; 
-                    border-top: none; 
+                    background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 #E3EECC, stop:.1 #ECF3E3, stop:1 #BEDB89);
+                    border: 2px solid #E3EECC; 
                     }
 
 /* TabBar will style the text in the tabs along the top */
 #TabBar {   
-          font-size: 22px; 
+          font-size: 18px; 
           font-weight: bold; 
-          color: #EFE; 
+          color: black; 
           }
 
 #TabBar::tab { 
-               color: #CDC;
-               background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 #668, stop:1 #213); 
-               padding: 5px; 
+               color: black;
+               background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 #ECF3E3, stop:1 #BEDB89); 
+               padding: 6px; 
                padding-right: 25px;
                border-top-right-radius: 30px; 
                border-top-left-radius: 10px;
                border: 2px solid #333;
-               margin-right: 10px;
+               margin-right: 2px;
                margin-bottom: -4px;
                }
 
 #TabBar::tab:selected { 
-                        color: #EFE;
-                        background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 #88A, stop:1 #435);
-                        border-color: silver;
-                        border-bottom-color: #435; 
+                        color: black;
+                        background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 #ECF3E3, stop:1 #E3EECC);
+                        border-color: #ECF3E3;
                         margin-bottom: 0px;
                         border-bottom: none;
+                        
                         }
 
 /* TabDescription styles the descriptive text at the top of the tab */
-#TabDescription { color: #EFF; font-size: 16px; text-align: center; padding: 20px; }
+#TabDescription { 
+                  color: black; 
+                  font-size: 16px; 
+                  text-align: center; 
+                  padding: 20px; 
+                  }
 
 /* LauncherPane styles the background for the scrollable area where the launchers live  */
-#LauncherPane { background-color: #AAF; }
+#LauncherPane { background-color: #EDEDED; background-image: url("tile.png"); border-color: #BEDB89; }
 
 /* LaunchButton styles the actual buttons for the launchers.  :hover and :pressed style the buttons when hovered or pressed, respectively  */
-#LaunchButton {  background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 #AAAAAC, stop:1 #88888a); border: 2px groove white; border-radius: 10px;}
-#LaunchButton:hover  { background-color: qlineargradient(x1:0, y1:1, x2:1, y2:0, stop:0 #CCCCCF, stop:1 #99999B);  }
-#LaunchButton:pressed  { background-color: qlineargradient(x1:0, y1:1, x2:1, y2:0, stop:0 #666668, stop:1 #444446); }
+#LaunchButton {  background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 white, stop:1 #ECF3E3); border: 2px groove #BEDB89; border-radius: 10px;}
+#LaunchButton:hover  { background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 white, stop:1 #FEFCD7);  }
+#LaunchButton:pressed  { background-color: qlineargradient(x1:0, y1:1, x2:1, y2:0, stop:0 #BEDB89, stop:1 #71b238); }
 
 /* LaunchButtonTitle and LaunchButtonDescription style the text in the launchers */
 #LaunchButtonTitle { color: black; font-size: 10pt; font-weight: bold; text-decoration: underline }

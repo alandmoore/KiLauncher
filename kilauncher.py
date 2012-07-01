@@ -13,6 +13,8 @@ import subprocess
 import glob
 import yaml
 import os
+import argparse
+
 
 class LaunchButton(QPushButton):
     """This is the actual button you push to launch the program."""
@@ -43,6 +45,7 @@ class LaunchButton(QPushButton):
         comment.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         comment.setWordWrap(True)
         comment.setObjectName("LaunchButtonDescription")
+
         leftlayout.addWidget(comment)
         textpane = QWidget()
         textpane.setLayout(leftlayout)
@@ -140,7 +143,10 @@ class KiLauncher(QTabWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    config = yaml.safe_load(open('kilauncher.yaml', 'r'))
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-c", "--config", action="store", dest="config", default="kilauncher.yaml", help="The configuration file to use.")
+    args = parser.parse_args()
+    config = yaml.safe_load(open(args.config, 'r'))
     l = KiLauncher(config)
     l.show()
     app.exec_()
