@@ -51,7 +51,7 @@ class LaunchButton(QPushButton):
         textpane.setLayout(leftlayout)
         iconpane = QLabel()
         # If the icon is a filename, attempt to load directly.  Otherwise, load from theme.
-        if icon:
+        if self.icon:
             icon = (os.path.isfile(self.icon) and QIcon(self.icon)) or QIcon.fromTheme(self.icon)
         else:
             icon = QIcon()
