@@ -36,6 +36,8 @@ tabs_and_launchers:
     name: "World Wide Web"
     #It can have some descriptive text, which will be displayed above the launchers
     description: "This tab contains programs designed to utilize the World Wide Web."
+    #It can also have an icon, which will appear in the tab
+    icon: "web-browser"
     # For this tab, create a list of launchers.
     launchers:
     # Launchers can be spelled out explicity by specifying name, comment, icon, and command

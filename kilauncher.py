@@ -101,7 +101,6 @@ class LauncherMenu(QWidget):
                 self.add_launcher_to_layout(b)
         self.scroller.setWidget(self.launcher_widget)
 
-
     def add_launchers_from_path(self, path):
         for desktop_file in glob.glob(path):
             b = LaunchButton(desktop_file=desktop_file, launcher_size=self.launcher_size, icon_size=self.icon_size)
@@ -113,7 +112,6 @@ class LauncherMenu(QWidget):
         if self.current_coordinates[1] % self.columns == 0:
             self.current_coordinates[1] = 0
             self.current_coordinates[0] += 1
-
 
 class KiLauncher(QTabWidget):
     """This is the main appliation"""
@@ -142,7 +140,12 @@ class KiLauncher(QTabWidget):
     def init_tabs(self):
         for tabordinal, launchers in sorted(self.tabs.items()):
             lm = LauncherMenu(launchers)
-            self.addTab(lm, launchers.get("name"))
+            if launchers.get("icon"):
+                icon = launchers.get("icon")
+                icon = (os.path.isfile(icon) and QIcon(icon)) or QIcon.fromTheme(icon)
+                self.addTab(lm, icon, launchers.get("name"))
+            else:
+                self.addTab(lm, launchers.get("name"))
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
