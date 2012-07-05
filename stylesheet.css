@@ -48,7 +48,7 @@
 #LauncherPane { background-color: #EDEDED; background-image: url("tile.png"); border-color: #BEDB89; }
 
 /* LaunchButton styles the actual buttons for the launchers.  :hover and :pressed style the buttons when hovered or pressed, respectively  */
-#LaunchButton {  background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 white, stop:1 #ECF3E3); border: 2px groove #BEDB89; border-radius: 10px;}
+#LaunchButton {  background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 white, stop:1 #ECF3E3); border: 2px groove #BEDB89; border-radius: 10px; opacity: .5}
 #LaunchButton:hover  { background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 white, stop:1 #FEFCD7);  }
 #LaunchButton:pressed  { background-color: qlineargradient(x1:0, y1:1, x2:1, y2:0, stop:0 #BEDB89, stop:1 #71b238); }
 

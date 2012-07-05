@@ -119,11 +119,11 @@ class LauncherMenu(QWidget):
 class KiLauncher(QTabWidget):
     """This is the main appliation"""
 
-    def __init__(self, config, parent=None):
+    def __init__(self, config, parent=None, **kwargs):
         super(KiLauncher, self).__init__(parent)
         self.setObjectName("KiLauncher")
         self.tabBar().setObjectName("TabBar")
-        self.stylesheet = config.get("stylesheet", 'stylesheet.css')
+        self.stylesheet = kwargs.get("stylesheet") or config.get("stylesheet", 'stylesheet.css')
         self.setWindowState(Qt.WindowFullScreen)
 
         # Setup the appearance
@@ -161,8 +161,9 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--config", action="store", dest="config", default="kilauncher.yaml", help="The configuration file to use.")
+    parser.add_argument("-s", "--stylesheet", action="store", dest="stylesheet", default=None, help="Override the stylesheet in the config file.")
     args = parser.parse_args()
     config = yaml.safe_load(open(args.config, 'r'))
-    l = KiLauncher(config)
+    l = KiLauncher(config, stylesheet=args.stylesheet)
     l.show()
     app.exec_()

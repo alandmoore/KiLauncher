@@ -33,10 +33,11 @@ What KiLauncher is NOT
 Requirements
 ============
 
-- python
+- python (should work with python 3.x or any recent python 2.x)
 - pyqt4
 - python-yaml
 - python-xdg
+- python-argparse
 
 Usage
 =====
@@ -49,11 +50,12 @@ The stylesheet.css file is where the style info is kept.  It uses QT Stylesheet 
 
 The current command line options available are: 
 
-============== ===================================
-Switch         Description
-============== ===================================
--c, --config   Specify a configuration file to use
-============== ===================================
+================ =============================================================
+Switch           Description
+================ =============================================================
+-c, --config     Specify a configuration file to use
+-s, --stylesheet Override the stylesheet in the config file (nice for testing)
+================ =============================================================
 
 
 
@@ -66,3 +68,8 @@ Contributions are welcome, as long as they keep the software developing along th
 - the appearance also needs to be hand-configurable
 - Generally speaking, it needs to be appropriate for a public or locked-down kiosk
 
+License
+=======
+
+KiLauncher, its documentation, and sample config files are released under the GNU GPL v3.  Please see the included COPYING file for details.
+  

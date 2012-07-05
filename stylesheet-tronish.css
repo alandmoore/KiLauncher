@@ -1,0 +1,60 @@
+/* This is not regular HTML-stle CSS, it's QT Stylesheet CSS */
+/* For a reference of supported features, see http://qt-project.org/doc/qt-4.8/stylesheet-reference.html */
+
+/* KiLauncher will style the main application background, etc.  ::pane defines the area under the tabs. */ 
+#KiLauncher { background-color: black; }
+#KiLauncher::pane { 
+                    background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 #F7D52A, stop:.1 black, stop:1 cyan);
+                    border: 2px double #F7D52A; 
+                    }
+
+/* TabBar will style the text in the tabs along the top */
+#TabBar {   
+          font-size: 22px; 
+          font-weight: bold; 
+          color: black; 
+          font-family: monofonto;
+          }
+
+#TabBar::tab { 
+               color: cyan;
+               background-color: black; 
+               padding: 6px; 
+               padding-right: 25px;
+               border-radius: 5px;
+               border: 4px double cyan;
+               margin-right: 2px;
+               margin-bottom: -4px;
+               }
+
+#TabBar::tab:selected { 
+                        color: ;
+                        background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 black, stop:1 #F7D52A);
+                        border-color: #F7D52A;
+                        margin-bottom: 0px;
+                        border-bottom: none;
+                        
+                        }
+
+/* TabDescription styles the descriptive text at the top of the tab */
+#TabDescription { 
+                  color: cyan; 
+                  font-size: 20px;
+                  font-family: monofonto;
+                  text-align: center; 
+                  padding: 20px; 
+                  }
+
+/* LauncherPane styles the background for the scrollable area where the launchers live  */
+#LauncherPane { 
+                background-color: qradialgradient(cx:0, cy:0, radius: .5, stop:0 #559794, stop: .4 #AAECE9, stop:1 black);  
+                }
+
+/* LaunchButton styles the actual buttons for the launchers.  :hover and :pressed style the buttons when hovered or pressed, respectively  */
+#LaunchButton {  background-color: black; border: 2px double cyan; border-radius: 40px; opacity: .5}
+#LaunchButton:hover  { border: 4px double #F7D52A;  }
+#LaunchButton:pressed  { background-color: #F7D52A; }
+
+/* LaunchButtonTitle and LaunchButtonDescription style the text in the launchers */
+#LaunchButtonTitle { color: cyan; font-size: 12pt; font-weight: bold; text-decoration: underline }
+#LaunchButtonDescription { color: cyan; font-size: 10pt; font-style: italic; }
