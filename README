@@ -58,6 +58,33 @@ Switch           Description
 ================ =============================================================
 
 
+How I'd likely use it
+---------------------
+
+Here's an example of how I'd likely make use of KiLauncher on a kiosk, for instace.
+
+- Set up a basic Linux system, create a kiosk user
+- create my custom kilauncher.yaml file, and place it in /etc 
+
+  - The easiest way, if you're just launching regular applications, is either copying .desktop files from /usr/share/applications into a folder then specifying that directory in the tab's desktop_directory option.
+  - Alternately, you can just leave them in /usr/share/applications and manually specify them in the launcher list using desktop_file.
+  - If you have a bunch of custom scripts or custom applications, it's probably easier to specify the name/icon/description/command manually in the launcher list.
+
+- (optionally) customize stylesheet.css, and maybe put it with kilauncher.yaml in /etc
+- In my kiosk user's home directory, create a .xsession file like so:
+
+  xset s off 
+  xset -dpms
+  openbox & #simple, minimal window manager
+  tint2 & #minimal, menu-less task bar
+  python kilauncher -c /etc/kilauncher.yaml -s /etc/stylesheet.css
+
+- Configure my kiosk to auto-login to my kiosk user and use its custom session.
+
+More info on setting up kiosk systems on Linux can be found on the author's blog: 
+
+http://www.alandmoore.com/blog/2011/11/05/creating-a-kiosk-with-linux-and-x11-2011-edition
+
 
 Contributing
 ============

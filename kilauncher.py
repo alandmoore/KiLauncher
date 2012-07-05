@@ -66,7 +66,7 @@ class LaunchButton(QPushButton):
 
     def callback(self):
         try:
-            subprocess.call(self.command.split())
+            subprocess.Popen(self.command.split())
         except:
             QMessageBox.critical(None, "Command Failed!", "Sorry, this program isn't working!")
             
@@ -124,8 +124,13 @@ class KiLauncher(QTabWidget):
         self.setObjectName("KiLauncher")
         self.tabBar().setObjectName("TabBar")
         self.stylesheet = kwargs.get("stylesheet") or config.get("stylesheet", 'stylesheet.css')
+        #Ideally, the menu should be full screen, but always stay beneath other windows
         self.setWindowState(Qt.WindowFullScreen)
-
+        self.setWindowFlags(self.windowFlags()|Qt.WindowStaysOnBottomHint|Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_X11NetWmWindowTypeMenu, True)
+        #"fullscreen" doesn't always work, depending on the WM.  This is a workaround.
+        self.resize(qApp.desktop().availableGeometry().size())
+        
         # Setup the appearance
         if self.stylesheet:
             self.setStyleSheet(open(self.stylesheet, 'r').read())
