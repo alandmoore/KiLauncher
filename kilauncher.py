@@ -146,6 +146,8 @@ class KiLauncher(QTabWidget):
             self.setCornerWidget(self.quit_button)
             self.connect(self.quit_button, SIGNAL("clicked()"), self.close)
 
+        #Since tabs are not dynamic, just hide them if there's only one.
+        self.tabBar().setVisible(len(self.tabs) > 1)
 
     def init_tabs(self):
         for tabordinal, launchers in sorted(self.tabs.items()):
