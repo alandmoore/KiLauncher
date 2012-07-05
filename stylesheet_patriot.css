@@ -1,0 +1,59 @@
+/* This is not regular HTML-stle CSS, it's QT Stylesheet CSS */
+/* For a reference of supported features, see http://qt-project.org/doc/qt-4.8/stylesheet-reference.html */
+
+/* KiLauncher will style the main application background, etc.  ::pane defines the area under the tabs. */ 
+#KiLauncher { background-color: white; }
+#KiLauncher::pane { 
+                    background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 navy, stop:.5 white, stop:1 red);
+                    border: 2px solid red; 
+                    border-top-width: 0px;;
+                    }
+
+/* TabBar will style the text in the tabs along the top */
+#TabBar {   
+          font-size: 18px; 
+          font-weight: bold; 
+          color: black; 
+          font-family: serif;
+          }
+
+#TabBar::tab { 
+               color: #DDD;
+               background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 blue, stop:1 black); 
+               padding: 6px; 
+               padding-right: 25px;
+               border-top-right-radius: 30px; 
+               border-top-left-radius: 10px;
+               border: 2px solid white;
+               margin-right: 2px;
+               margin-bottom: -4px;
+               }
+
+#TabBar::tab:selected { 
+                        color: white;
+                        background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 red, stop:1 navy);
+                        border-color: red;
+                        margin-bottom: 0px;
+                        border-bottom: none;
+                        }
+
+/* TabDescription styles the descriptive text at the top of the tab */
+#TabDescription { 
+                  color: white; 
+                  font-size: 16px; 
+                  text-align: center; 
+                  padding: 20px; 
+                  font-family: serif;
+                  }
+
+/* LauncherPane styles the background for the scrollable area where the launchers live  */
+#LauncherPane { background-color: qlineargradient(spread: reflect, x1:0, y1:0, x2:0, y2:.1, stop:0 #FEE, stop:1 white); border-color: blue; }
+
+/* LaunchButton styles the actual buttons for the launchers.  :hover and :pressed style the buttons when hovered or pressed, respectively  */
+#LaunchButton {  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 navy, stop:1 blue); border: 2px solid navy; border-radius: 5px; }
+#LaunchButton:hover  { border-color: red;  }
+#LaunchButton:pressed  { background-color: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 pink, stop:1 navy); }
+
+/* LaunchButtonTitle and LaunchButtonDescription style the text in the launchers */
+#LaunchButtonTitle { color: white; font-size: 11pt; font-weight: bold; text-decoration: underline; font-family: serif; }
+#LaunchButtonDescription { color: #AAA; font-size: 9pt; font-style: italic; font-family: serif; }
