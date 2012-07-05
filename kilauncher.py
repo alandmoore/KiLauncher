@@ -140,6 +140,13 @@ class KiLauncher(QTabWidget):
             self.setLayout(QHBoxLayout())
             self.layout().addWidget(QLabel("No tabs were configured.  Please check your configuration file."))
 
+        #Quit button
+        if (config.get("show_quit_button")):
+            self.quit_button = QPushButton(config.get("quit_button_text") or "X")
+            self.setCornerWidget(self.quit_button)
+            self.connect(self.quit_button, SIGNAL("clicked()"), self.close)
+
+
     def init_tabs(self):
         for tabordinal, launchers in sorted(self.tabs.items()):
             lm = LauncherMenu(launchers)

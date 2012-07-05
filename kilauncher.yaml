@@ -21,6 +21,17 @@ stylesheet: "stylesheet.css"
 
 icon_theme: "Tango"
 
+# Show Quit Button
+# If you need people to be able to exit the program, set this to true
+# Default: false
+
+# show_quit_button: True
+
+# You can also set the text of the quit button
+# It defaults to "X"
+
+# quit_button_text: "Quit this program"
+
 
 ######################
 # Tabs and Launchers #
