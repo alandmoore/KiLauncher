@@ -55,3 +55,8 @@
 /* LaunchButtonTitle and LaunchButtonDescription style the text in the launchers */
 #LaunchButtonTitle { color: black; font-size: 10pt; font-weight: bold; text-decoration: underline }
 #LaunchButtonDescription { color: #333; font-size: 8pt; font-style: italic; }
+
+/*QuitButton styles the quit button, if you've enabled it*/
+
+#QuitButton { color: #FEFCD7; background-color: #71b238; border: 1px solid black; padding: 4px; border-radius: 5px; }
+#QuitButton:hover { background-color: #BED889; }

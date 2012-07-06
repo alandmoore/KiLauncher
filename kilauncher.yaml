@@ -25,12 +25,12 @@ icon_theme: "Tango"
 # If you need people to be able to exit the program, set this to true
 # Default: false
 
-# show_quit_button: True
+show_quit_button: True
 
 # You can also set the text of the quit button
 # It defaults to "X"
 
-# quit_button_text: "Quit this program"
+quit_button_text: "Quit this program"
 
 
 ######################
@@ -85,11 +85,11 @@ tabs_and_launchers:
 
   # Here's a second tab, that will hold all programs on the system starting with 'A'
   2:
-    name: "Programs that start with 'A'"
+    name: "Programs that start with 'B'"
     # Note the absence of the hyphen.  This is a property of the tab itself, not part of a launchers array.
     # Also note the use of the wildcard character in the name.  That's allowed.
     # keep in mind, you have no control over the ordering if you go this route.
-    desktop_path: "/usr/share/applications/a*.desktop"
+    desktop_path: "/usr/share/applications/b*.desktop"
    
     # Once again, a descriptive comment
     description: "These are all the programs I could find on your system that begin with the letter A."

@@ -15,7 +15,46 @@ import yaml
 import os
 import argparse
 
+def recursive_find(rootdir, myfilename):
+    return [os.path.join(rootdir, filename)
+            for rootdir, dirnames, filenames in os.walk(rootdir)
+            for filename in filenames
+            if filename == myfilename]
 
+
+def icon_anyway_you_can(icon_name):
+    """Takes an icon name or path, and returns a QIcon any way it can"""
+    icon = None
+    if os.path.isfile(icon_name):
+        icon = QIcon(icon_name)
+    elif QIcon.hasThemeIcon(icon_name):
+        icon = QIcon.fromTheme(icon_name)
+    elif os.path.isfile(os.path.join("/usr/share/pixmaps", icon_name)):
+        icon = QIcon(os.path.join("/usr/share/pixmaps", icon_name))
+    else:
+        #Last ditch effort
+        #search through some known (Linux) icon locations
+        #This recursive search is really slow, hopefully it can be avoided.
+        print("Warning: had to recursively search for icon \"%s\".  Please set a full path to the correct file to reduce startup time." % icon_name)
+        directories = ["/usr/share/pixmaps", "/usr/share/icons", "/usr/share/icons/hicolor", "/usr/share/" + icon_name]
+        extensions = ["", ".png", ".xpm", ".svg", ".jpg", ".jpeg", ".bmp", ".tiff", ".tif", ".ico"]
+        possible_filenames = [icon_name + extension for extension in extensions]
+        for directory in directories:
+            for filename in possible_filenames:
+                paths = recursive_find(directory, filename)
+                if paths:
+                    print("(eventually found \"%s\")" % paths[0])
+                    icon = QIcon(paths[0])
+                    break
+            if icon:
+                break
+        if not icon:
+            print("Couldn't find an icon for \"%s\"" % icon_name)
+
+    return icon or QIcon()
+
+
+        
 class LaunchButton(QPushButton):
     """This is the actual button you push to launch the program."""
     
@@ -52,10 +91,10 @@ class LaunchButton(QPushButton):
         iconpane = QLabel()
         # If the icon is a filename, attempt to load directly.  Otherwise, load from theme.
         if self.icon:
-            icon = (os.path.isfile(self.icon) and QIcon(self.icon)) or QIcon.fromTheme(self.icon)
+            icon = icon_anyway_you_can(self.icon)
         else:
             icon = QIcon()
-        iconpane.setPixmap(icon.pixmap(*self.icon_size))
+        iconpane.setPixmap(icon.pixmap(*self.icon_size).scaled(*self.icon_size))
         toplayout.addWidget(iconpane)
         toplayout.addWidget(textpane)
         self.setLayout(toplayout)
@@ -148,6 +187,7 @@ class KiLauncher(QTabWidget):
         #Quit button
         if (config.get("show_quit_button")):
             self.quit_button = QPushButton(config.get("quit_button_text") or "X")
+            self.quit_button.setObjectName("QuitButton")
             self.setCornerWidget(self.quit_button)
             self.connect(self.quit_button, SIGNAL("clicked()"), self.close)
 
@@ -159,7 +199,7 @@ class KiLauncher(QTabWidget):
             lm = LauncherMenu(launchers)
             if launchers.get("icon"):
                 icon = launchers.get("icon")
-                icon = (os.path.isfile(icon) and QIcon(icon)) or QIcon.fromTheme(icon)
+                icon = icon_anyway_you_can(icon)
                 self.addTab(lm, icon, launchers.get("name"))
             else:
                 self.addTab(lm, launchers.get("name"))
