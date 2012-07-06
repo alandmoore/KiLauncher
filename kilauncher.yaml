@@ -81,6 +81,8 @@ tabs_and_launchers:
     # Alternately, if you have a .desktop file for the application, specify it (and only it)
     - 
       desktop_file: "/usr/share/applications/firefox.desktop"
+      #but you can still override individual aspects of the file
+      icon: "/usr/share/pixmaps/firefox.png"
 
     # Broken buttons will return an error to the user.
     -

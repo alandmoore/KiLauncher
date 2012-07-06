@@ -63,17 +63,19 @@ class LaunchButton(QPushButton):
         self.setObjectName("LaunchButton")
         self.launcher_size = kwargs.get("launcher_size")
         self.icon_size = kwargs.get("icon_size")
+        self.name, self.comment, self.icon, self.command = None, None, None, None
+        
         if kwargs.get("desktop_file"):
             de = DesktopEntry(kwargs.get("desktop_file"))
             self.name = de.getName()
             self.comment = de.getComment()
             self.icon = de.getIcon()
             self.command = de.getExec()
-        else:
-            self.name = kwargs.get("name")
-            self.comment = kwargs.get("comment")
-            self.icon = kwargs.get("icon")
-            self.command =  kwargs.get("command")
+        
+        self.name = kwargs.get("name", self.name)
+        self.comment = kwargs.get("comment", self.comment)
+        self.icon = kwargs.get("icon", self.icon)
+        self.command =  kwargs.get("command", self.command)
             
         toplayout = QHBoxLayout()
         leftlayout = QVBoxLayout()
