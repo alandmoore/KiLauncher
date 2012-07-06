@@ -100,7 +100,7 @@ tabs_and_launchers:
     desktop_path: "/usr/share/applications/b*.desktop"
    
     # Once again, a descriptive comment
-    description: "These are all the programs I could find on your system that begin with the letter A."
+    description: "These are all the programs I could find on your system that begin with the letter B."
     # Tabs can also specify 
     #  - the maximum number of launchers in a row,
     #  - the size of the launchers
