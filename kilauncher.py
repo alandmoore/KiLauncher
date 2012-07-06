@@ -22,7 +22,7 @@ def recursive_find(rootdir, myfilename):
             if filename == myfilename]
 
 
-def icon_anyway_you_can(icon_name):
+def icon_anyway_you_can(icon_name, recursive_search=True):
     """Takes an icon name or path, and returns a QIcon any way it can"""
     icon = None
     if os.path.isfile(icon_name):
@@ -31,7 +31,7 @@ def icon_anyway_you_can(icon_name):
         icon = QIcon.fromTheme(icon_name)
     elif os.path.isfile(os.path.join("/usr/share/pixmaps", icon_name)):
         icon = QIcon(os.path.join("/usr/share/pixmaps", icon_name))
-    else:
+    elif recursive_search:
         #Last ditch effort
         #search through some known (Linux) icon locations
         #This recursive search is really slow, hopefully it can be avoided.
@@ -91,7 +91,7 @@ class LaunchButton(QPushButton):
         iconpane = QLabel()
         # If the icon is a filename, attempt to load directly.  Otherwise, load from theme.
         if self.icon:
-            icon = icon_anyway_you_can(self.icon)
+            icon = icon_anyway_you_can(self.icon, kwargs.get("aggressive_icon_search", False))
         else:
             icon = QIcon()
         iconpane.setPixmap(icon.pixmap(*self.icon_size).scaled(*self.icon_size))
@@ -139,13 +139,14 @@ class LauncherMenu(QWidget):
             for launcher in self.config.get("launchers"):
                 launcher["launcher_size"] = self.launcher_size
                 launcher["icon_size"] = self.icon_size
+                launcher["aggressive_icon_search"] = self.config.get("aggressive_icon_search", False)
                 b = LaunchButton(**launcher)
                 self.add_launcher_to_layout(b)
         self.scroller.setWidget(self.launcher_widget)
 
     def add_launchers_from_path(self, path):
         for desktop_file in glob.glob(path):
-            b = LaunchButton(desktop_file=desktop_file, launcher_size=self.launcher_size, icon_size=self.icon_size)
+            b = LaunchButton(desktop_file=desktop_file, launcher_size=self.launcher_size, icon_size=self.icon_size, aggressive_icon_search=self.config.get("aggressive_icon_search"))
             self.add_launcher_to_layout(b)
 
     def add_launcher_to_layout(self, launcher):
@@ -162,6 +163,7 @@ class KiLauncher(QTabWidget):
         super(KiLauncher, self).__init__(parent)
         self.setObjectName("KiLauncher")
         self.tabBar().setObjectName("TabBar")
+        self.aggressive_icon_search = config.get("aggressive_icon_search")
         self.stylesheet = kwargs.get("stylesheet") or config.get("stylesheet", 'stylesheet.css')
         #Ideally, the menu should be full screen, but always stay beneath other windows
         self.setWindowState(Qt.WindowFullScreen)
@@ -196,10 +198,11 @@ class KiLauncher(QTabWidget):
 
     def init_tabs(self):
         for tabordinal, launchers in sorted(self.tabs.items()):
+            launchers["aggressive_icon_search"] = self.aggressive_icon_search
             lm = LauncherMenu(launchers)
             if launchers.get("icon"):
                 icon = launchers.get("icon")
-                icon = icon_anyway_you_can(icon)
+                icon = icon_anyway_you_can(icon, False)
                 self.addTab(lm, icon, launchers.get("name"))
             else:
                 self.addTab(lm, launchers.get("name"))

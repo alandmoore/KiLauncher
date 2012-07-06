@@ -32,6 +32,12 @@ show_quit_button: True
 
 quit_button_text: "Quit this program"
 
+# Turning on aggressive icon search can help find icons for badly configured .desktop files.
+# It also vastly increases start time, especially on slow systems.
+# Default: False
+
+# aggressive_icon_search: True
+
 
 ######################
 # Tabs and Launchers #
