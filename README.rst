@@ -59,7 +59,7 @@ Switch           Description
 
 
 How I'd likely use it
----------------------
+~~~~~~~~~~~~~~~~~~~~~
 
 Here's an example of how I'd likely make use of KiLauncher on a kiosk, for instace.
 
