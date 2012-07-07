@@ -71,7 +71,7 @@ Here's an example of how I'd likely make use of KiLauncher on a kiosk, for insta
   - If you have a bunch of custom scripts or custom applications, it's probably easier to specify the name/icon/description/command manually in the launcher list.
 
 - (optionally) customize stylesheet.css, and maybe put it with kilauncher.yaml in /etc
-- In my kiosk user's home directory, create a .xsession file like so:
+- In my kiosk user's home directory, create a .xsession file like so::
 
   xset s off 
   xset -dpms
