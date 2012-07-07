@@ -73,11 +73,11 @@ Here's an example of how I'd likely make use of KiLauncher on a kiosk, for insta
 - (optionally) customize stylesheet.css, and maybe put it with kilauncher.yaml in /etc
 - In my kiosk user's home directory, create a .xsession file like so::
 
-  xset s off 
-  xset -dpms
-  openbox & #simple, minimal window manager
-  tint2 & #minimal, menu-less task bar
-  python kilauncher -c /etc/kilauncher.yaml -s /etc/stylesheet.css
+    xset s off 
+    xset -dpms
+    openbox & #simple, minimal window manager
+    tint2 & #minimal, menu-less task bar
+    python kilauncher -c /etc/kilauncher.yaml -s /etc/stylesheet.css
 
 - Configure my kiosk to auto-login to my kiosk user and use its custom session.
 

@@ -9,7 +9,6 @@ from PyQt4.QtCore import *
 from xdg.DesktopEntry import DesktopEntry
 
 import sys
-import subprocess
 import glob
 import yaml
 import os
@@ -105,11 +104,21 @@ class LaunchButton(QPushButton):
 
         self.connect(self, SIGNAL("clicked()"), self.callback)
 
+    def enable(self, exit_code):
+        self.setDisabled(False)
+
+    def enable_with_error(self, error):
+        self.setDisabled(False)
+        QMessageBox.critical(None, "Command Failed!", "Sorry, this program isn't working!")
+
     def callback(self):
-        try:
-            subprocess.Popen(self.command.split())
-        except:
-            QMessageBox.critical(None, "Command Failed!", "Sorry, this program isn't working!")
+        self.p = QProcess()
+        self.connect(self.p, SIGNAL("finished(int)"), self.enable)
+        self.connect(self.p, SIGNAL("error(QProcess::ProcessError)"), self.enable_with_error)
+        self.p.start(self.command)
+        if not self.p.state == QProcess.NotRunning:
+            self.setDisabled(True)
+
             
 class LauncherMenu(QWidget):
     """This is a single pane of launchers on a tab"""
