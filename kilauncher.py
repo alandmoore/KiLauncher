@@ -49,7 +49,6 @@ def icon_anyway_you_can(icon_name, recursive_search=True):
                 break
         if not icon:
             print("Couldn't find an icon for \"%s\"" % icon_name)
-
     return icon or QIcon()
 
 
@@ -63,7 +62,8 @@ class LaunchButton(QPushButton):
         self.launcher_size = kwargs.get("launcher_size")
         self.icon_size = kwargs.get("icon_size")
         self.name, self.comment, self.icon, self.command = None, None, None, None
-        
+
+        # Load in details from a .desktop file, if there is one.
         if kwargs.get("desktop_file"):
             de = DesktopEntry(kwargs.get("desktop_file"))
             self.name = de.getName()
@@ -76,31 +76,41 @@ class LaunchButton(QPushButton):
         self.comment = kwargs.get("comment", self.comment)
         self.icon = kwargs.get("icon", self.icon)
         self.command =  kwargs.get("command", self.command)
-            
+
+        # Create the layouts and widgets to hold the information    
         toplayout = QHBoxLayout()
         leftlayout = QVBoxLayout()
+
+        # The button's title
         title = QLabel(self.name)
         title.setObjectName("LaunchButtonTitle")
         leftlayout.addWidget(title)
+
+        # The button's descriptive comment
         comment = QLabel(self.comment)
         comment.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         comment.setWordWrap(True)
         comment.setObjectName("LaunchButtonDescription")
-
         leftlayout.addWidget(comment)
+
+        # The button's icon, if there is one
         iconpane = QLabel()
-        # If the icon is a filename, attempt to load directly.  Otherwise, load from theme.
-        if self.icon:
-            icon = icon_anyway_you_can(self.icon, kwargs.get("aggressive_icon_search", False))
-        else:
-            icon = QIcon()
-        iconpane.setPixmap(icon.pixmap(*self.icon_size).scaled(*self.icon_size))
+        icon = (self.icon and icon_anyway_you_can(self.icon, kwargs.get("aggressive_icon_search", False))) or QIcon()
+        pixmap = icon.pixmap(*self.icon_size)
+        if not pixmap.isNull():
+            pixmap = pixmap.scaled(*self.icon_size)
+        iconpane.setPixmap(pixmap)
+
+        # Add everything to layouts and layouts to the button
         toplayout.addWidget(iconpane)
         toplayout.addLayout(leftlayout)
         self.setLayout(toplayout)
+
+        # Set the button's size from config.
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.setMinimumSize(QSize(*self.launcher_size))
 
+        # Connect the callback
         self.connect(self, SIGNAL("clicked()"), self.callback)
 
     def enable(self, exit_code):
@@ -111,11 +121,14 @@ class LaunchButton(QPushButton):
         QMessageBox.critical(None, "Command Failed!", "Sorry, this program isn't working!")
 
     def callback(self):
+        # commands are called in a separate thread using QProcess.
+        # This way, they can indicate to us when they are finished, or if they ran correctly, using signals
         self.p = QProcess()
         self.connect(self.p, SIGNAL("finished(int)"), self.enable)
         self.connect(self.p, SIGNAL("error(QProcess::ProcessError)"), self.enable_with_error)
         self.p.start(self.command)
         if not self.p.state == QProcess.NotRunning:
+            # Disable the button to prevent users clicking 200 times waiting on a slow program.
             self.setDisabled(True)
 
             
