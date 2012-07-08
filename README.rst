@@ -6,6 +6,12 @@
 A full-screen launcher
 ----------------------
 
+Author
+======
+
+written by Alan D Moore (http://www.alandmoore.com)
+Copyright 2012
+
 Abstract
 ========
 

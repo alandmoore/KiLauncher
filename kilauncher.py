@@ -123,6 +123,9 @@ class LaunchButton(QPushButton):
     def callback(self):
         # commands are called in a separate thread using QProcess.
         # This way, they can indicate to us when they are finished, or if they ran correctly, using signals
+        # XDG commands in desktop files sometimes have placeholder arguments like '%u' or '%f'.
+        # We're going to strip these out.
+        self.command = ' '.join(x for x in self.command.split() if x not in ('%f', '%F', '%u', '%U'))
         self.p = QProcess()
         self.connect(self.p, SIGNAL("finished(int)"), self.enable)
         self.connect(self.p, SIGNAL("error(QProcess::ProcessError)"), self.enable_with_error)

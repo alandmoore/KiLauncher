@@ -2,7 +2,7 @@
 /* For a reference of supported features, see http://qt-project.org/doc/qt-4.8/stylesheet-reference.html */
 
 /* KiLauncher will style the main application background, etc.  ::pane defines the area under the tabs. */ 
-#KiLauncher { background-color: white; }
+#KiLauncher { background-color: #AAF; }
 #KiLauncher::pane { 
                     background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 navy, stop:.5 white, stop:1 red);
                     border: 2px solid red; 
@@ -47,7 +47,7 @@
                   }
 
 /* LauncherPane styles the background for the scrollable area where the launchers live  */
-#LauncherPane { background-color: qlineargradient(spread: reflect, x1:0, y1:0, x2:0, y2:.1, stop:0 #FEE, stop:1 white); border-color: blue; }
+#LauncherPane { background-color: qlineargradient(spread: reflect, x1:0, y1:0, x2:0, y2:.1, stop:0 #FAA, stop:1 white); border-color: blue; }
 
 /* LaunchButton styles the actual buttons for the launchers.  :hover and :pressed style the buttons when hovered or pressed, respectively  */
 #LaunchButton {  background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 navy, stop:1 blue); border: 2px solid navy; border-radius: 5px; }
@@ -57,3 +57,6 @@
 /* LaunchButtonTitle and LaunchButtonDescription style the text in the launchers */
 #LaunchButtonTitle { color: white; font-size: 11pt; font-weight: bold; text-decoration: underline; font-family: serif; }
 #LaunchButtonDescription { color: #AAA; font-size: 9pt; font-style: italic; font-family: serif; }
+
+#QuitButton { color: red; font-weight: bold; background-color: white; border-radius: 0px; border: 2px solid navy; padding: 5px; }
+#QuitButton:hover { color: white; background-color: navy;border: 2px solid red; }
