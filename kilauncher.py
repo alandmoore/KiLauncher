@@ -88,8 +88,6 @@ class LaunchButton(QPushButton):
         comment.setObjectName("LaunchButtonDescription")
 
         leftlayout.addWidget(comment)
-        textpane = QWidget()
-        textpane.setLayout(leftlayout)
         iconpane = QLabel()
         # If the icon is a filename, attempt to load directly.  Otherwise, load from theme.
         if self.icon:
@@ -98,7 +96,7 @@ class LaunchButton(QPushButton):
             icon = QIcon()
         iconpane.setPixmap(icon.pixmap(*self.icon_size).scaled(*self.icon_size))
         toplayout.addWidget(iconpane)
-        toplayout.addWidget(textpane)
+        toplayout.addLayout(leftlayout)
         self.setLayout(toplayout)
         self.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         self.setMinimumSize(QSize(*self.launcher_size))
