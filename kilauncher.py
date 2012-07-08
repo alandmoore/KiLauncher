@@ -70,7 +70,8 @@ class LaunchButton(QPushButton):
             self.comment = de.getComment()
             self.icon = de.getIcon()
             self.command = de.getExec()
-        
+            
+        # This allows for overriding the settings in DesktopEntry 
         self.name = kwargs.get("name", self.name)
         self.comment = kwargs.get("comment", self.comment)
         self.icon = kwargs.get("icon", self.icon)
@@ -140,9 +141,12 @@ class LauncherMenu(QWidget):
         self.launcher_widget.setLayout(self.launcherlayout)
         self.layout.addWidget(self.scroller)
         self.setLayout(self.layout)
-        self.columns = config.get("launchers_per_row", 5)
         self.launcher_size = (config.get("launcher_size") and [int(x) for x in config.get("launcher_size").split('x')]) or [240, 80]
         self.icon_size = (config.get("icon_size") and [int(x) for x in config.get("icon_size").split('x')]) or [64, 64]
+        # figure out the default number of columns by dividing the launcher width by the screen width.
+        # Of course, if that's zero (if the launcher is actually wider than the viewport) make it 1
+        self.default_columns = (qApp.desktop().availableGeometry().width() // self.launcher_size[0]) or 1
+        self.columns = config.get("launchers_per_row", self.default_columns)
         self.current_coordinates = [0, 0]
         if self.config.get("desktop_path"):
             self.add_launchers_from_path(self.config.get("desktop_path"))
