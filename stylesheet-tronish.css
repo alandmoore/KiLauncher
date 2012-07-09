@@ -13,7 +13,7 @@
           font-size: 18px; 
           font-weight: bold; 
           color: black; 
-          font-family: mono;
+          font-family: sans;
           }
 
 #TabBar::tab { 
@@ -40,7 +40,7 @@
 #TabDescription { 
                   color: cyan; 
                   font-size: 16px;
-                  font-family: mono;
+                  font-family: sans;
                   text-align: center; 
                   padding: 20px; 
                   }
@@ -51,13 +51,17 @@
                 }
 
 /* LaunchButton styles the actual buttons for the launchers.  :hover and :pressed style the buttons when hovered or pressed, respectively  */
-#LaunchButton {  background-color: black; border: 2px double cyan; border-radius: 40px; padding: 12px;}
-#LaunchButton:hover  { border: 4px double #F7D52A;  }
+#LaunchButton {  
+                background-color: qlineargradient(spread: reflect, x1:0, y1: 0, x2: 0, y2: 1, stop: 0 rgba(0, 0, 0, 35%), stop: .1 rgba(200, 200, 200, 60%), stop: .3 rgba(0, 0, 0, 50%)) ; 
+                border: 4px outset cyan; border-radius: 40px; 
+                padding: 12px;
+                }
+#LaunchButton:hover  { border: 4px outset #F7D52A;  }
 #LaunchButton:pressed  { background-color: #F7D52A; }
 
 /* LaunchButtonTitle and LaunchButtonDescription style the text in the launchers */
 #LaunchButtonTitle { color: cyan; font-size: 12px; font-weight: bold; text-decoration: underline; padding: 4px; }
 #LaunchButtonDescription { color: cyan; font-size: 10px; font-style: italic; }
 
-#QuitButton { border: 2px solid cyan; border-radius: 10px; padding: 4px; color: cyan; }
+#QuitButton { border: 2px outset cyan; border-radius: 10px; padding: 4px; color: cyan; background-color: qlineargradient(spread: reflect, x1:0, y1: 0, x2: 0, y2: 1, stop: 0 rgba(0, 0, 0, 35%), stop: .1 rgba(200, 200, 200, 60%), stop: .3 rgba(0, 0, 0, 50%)) }
 #QuitButton:hover { border-color: #F7D52A; color: #F7D52A;  }
