@@ -10,10 +10,10 @@
 
 /* TabBar will style the text in the tabs along the top */
 #TabBar {   
-          font-size: 22px; 
+          font-size: 18px; 
           font-weight: bold; 
           color: black; 
-          font-family: monofonto;
+          font-family: mono;
           }
 
 #TabBar::tab { 
@@ -21,40 +21,43 @@
                background-color: black; 
                padding: 6px; 
                padding-right: 25px;
-               border-radius: 5px;
+               border-radius: 5px 5px 0 0;
                border: 4px double cyan;
                margin-right: 2px;
                margin-bottom: -4px;
                }
 
 #TabBar::tab:selected { 
-                        color: ;
-                        background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 black, stop:1 #F7D52A);
+                        color: #F7D52A;
+                        background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 black, stop:.3 #333, stop:1 #F7D52A);
                         border-color: #F7D52A;
                         margin-bottom: 0px;
                         border-bottom: none;
-                        
+                        border-radius: 5px 5px 0 0;
                         }
 
 /* TabDescription styles the descriptive text at the top of the tab */
 #TabDescription { 
                   color: cyan; 
-                  font-size: 20px;
-                  font-family: monofonto;
+                  font-size: 16px;
+                  font-family: mono;
                   text-align: center; 
                   padding: 20px; 
                   }
 
 /* LauncherPane styles the background for the scrollable area where the launchers live  */
 #LauncherPane { 
-                background-color: qradialgradient(cx:0, cy:0, radius: .5, stop:0 #559794, stop: .4 #AAECE9, stop:1 black);  
+                background-color: qradialgradient(spread: reflect, cx:0, cy:0, radius: .5, fx:-1, fy:-1, stop:0 #559794, stop: .4 #AAECE9, stop:1 black);  
                 }
 
 /* LaunchButton styles the actual buttons for the launchers.  :hover and :pressed style the buttons when hovered or pressed, respectively  */
-#LaunchButton {  background-color: black; border: 2px double cyan; border-radius: 40px; opacity: .5}
+#LaunchButton {  background-color: black; border: 2px double cyan; border-radius: 40px; padding: 12px;}
 #LaunchButton:hover  { border: 4px double #F7D52A;  }
 #LaunchButton:pressed  { background-color: #F7D52A; }
 
 /* LaunchButtonTitle and LaunchButtonDescription style the text in the launchers */
-#LaunchButtonTitle { color: cyan; font-size: 12pt; font-weight: bold; text-decoration: underline }
-#LaunchButtonDescription { color: cyan; font-size: 10pt; font-style: italic; }
+#LaunchButtonTitle { color: cyan; font-size: 12px; font-weight: bold; text-decoration: underline; padding: 4px; }
+#LaunchButtonDescription { color: cyan; font-size: 10px; font-style: italic; }
+
+#QuitButton { border: 2px solid cyan; border-radius: 10px; padding: 4px; color: cyan; }
+#QuitButton:hover { border-color: #F7D52A; color: #F7D52A;  }
