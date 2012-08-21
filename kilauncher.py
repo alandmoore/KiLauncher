@@ -52,10 +52,10 @@ def icon_anyway_you_can(icon_name, recursive_search=True):
     return icon or QIcon()
 
 
-        
+
 class LaunchButton(QPushButton):
     """This is the actual button you push to launch the program."""
-    
+
     def __init__(self, parent=None, **kwargs):
         super(LaunchButton, self).__init__(parent)
         self.setObjectName("LaunchButton")
@@ -70,14 +70,14 @@ class LaunchButton(QPushButton):
             self.comment = de.getComment()
             self.icon = de.getIcon()
             self.command = de.getExec()
-            
-        # This allows for overriding the settings in DesktopEntry 
+
+        # This allows for overriding the settings in DesktopEntry
         self.name = kwargs.get("name", self.name)
         self.comment = kwargs.get("comment", self.comment)
         self.icon = kwargs.get("icon", self.icon)
         self.command =  kwargs.get("command", self.command)
 
-        # Create the layouts and widgets to hold the information    
+        # Create the layouts and widgets to hold the information
         toplayout = QHBoxLayout()
         leftlayout = QVBoxLayout()
 
@@ -134,7 +134,7 @@ class LaunchButton(QPushButton):
             # Disable the button to prevent users clicking 200 times waiting on a slow program.
             self.setDisabled(True)
 
-            
+
 class LauncherMenu(QWidget):
     """This is a single pane of launchers on a tab"""
     def __init__(self, config, parent=None):
@@ -194,20 +194,23 @@ class KiLauncher(QTabWidget):
         self.tabBar().setObjectName("TabBar")
         self.aggressive_icon_search = config.get("aggressive_icon_search")
         self.stylesheet = kwargs.get("stylesheet") or config.get("stylesheet", 'stylesheet.css')
+        if not os.path.exists(self.stylesheet):
+            print("Warning: stylesheet file %s could not be located.  Using default style." % self.stylesheet)
+            self.stylesheet = None
         #Ideally, the menu should be full screen, but always stay beneath other windows
         self.setWindowState(Qt.WindowFullScreen)
         self.setWindowFlags(self.windowFlags()|Qt.WindowStaysOnBottomHint|Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_X11NetWmWindowTypeMenu, True)
         #"fullscreen" doesn't always work, depending on the WM.  This is a workaround.
         self.resize(qApp.desktop().availableGeometry().size())
-        
+
         # Setup the appearance
         if self.stylesheet:
             self.setStyleSheet(open(self.stylesheet, 'r').read())
         if config.get("icon_theme"):
             QIcon.setThemeName(config.get("icon_theme"))
 
-        # Set up the tabs    
+        # Set up the tabs
         self.tabs = config.get("tabs_and_launchers")
         if self.tabs:
             self.init_tabs()
@@ -237,12 +240,22 @@ class KiLauncher(QTabWidget):
                 self.addTab(lm, launchers.get("name"))
 
 if __name__ == '__main__':
+    config_locations = ['/etc/kilauncher.yaml', '~/.kilauncher.yaml']
+    config_file = ''
+    for config_location in config_locations:
+        if os.path.exists(os.path.expanduser(config_location)):
+            config_file = config_location
     app = QApplication(sys.argv)
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--config", action="store", dest="config", default="kilauncher.yaml", help="The configuration file to use.")
+    parser.add_argument("-c", "--config", action="store", dest="config", default=None, help="The configuration file to use.")
     parser.add_argument("-s", "--stylesheet", action="store", dest="stylesheet", default=None, help="Override the stylesheet in the config file.")
     args = parser.parse_args()
-    config = yaml.safe_load(open(args.config, 'r'))
+    config_file = args.config or os.path.expanduser(config_file)
+    if not config_file:
+        print("No config file found or specified; exiting")
+        sys.exit(1)
+    print(config_file)
+    config = yaml.safe_load(open(config_file, 'r'))
     l = KiLauncher(config, stylesheet=args.stylesheet)
     l.show()
     app.exec_()
