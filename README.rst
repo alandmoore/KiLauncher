@@ -48,13 +48,15 @@ Requirements
 Usage
 =====
 
-The program is still kind of in alpha state, so the exact usage is in flux.  
+The program is still kind of in alpha state, so the exact usage is in flux.
 
 The kilauncher.yaml file is the configuration file, and is well commented to show how shortcuts can be configured.  Basically, you can give it directories full of .desktop files, individual .desktop files, or explicit name/comment/icon/command values to define launchers for each tab.
 
+If a config file is not specified on the command line, kilauncher will use ~/.kilauncher.yaml.  If that doesn't exist, it will use /etc/kilauncher.yaml.  If neither location exists and a file isn't specified, the program will just print an error to stdout and exit.
+
 The stylesheet.css file is where the style info is kept.  It uses QT Stylesheet code, NOT regular CSS.  It's close, but the former is a subset so not everything works, and some things don't work like you'd expect.
 
-The current command line options available are: 
+The current command line options available are:
 
 ================ =============================================================
 Switch           Description
@@ -70,7 +72,7 @@ How I'd likely use it
 Here's an example of how I'd likely make use of KiLauncher on a kiosk, for instace.
 
 - Set up a basic Linux system, create a kiosk user
-- create my custom kilauncher.yaml file, and place it in /etc 
+- create my custom kilauncher.yaml file, and place it in /etc
 
   - The easiest way, if you're just launching regular applications, is either copying .desktop files from /usr/share/applications into a folder then specifying that directory in the tab's desktop_directory option.
   - Alternately, you can just leave them in /usr/share/applications and manually specify them in the launcher list using desktop_file.
@@ -79,7 +81,7 @@ Here's an example of how I'd likely make use of KiLauncher on a kiosk, for insta
 - (optionally) customize stylesheet.css, and maybe put it with kilauncher.yaml in /etc
 - In my kiosk user's home directory, create a .xsession file like so::
 
-    xset s off 
+    xset s off
     xset -dpms
     openbox & #simple, minimal window manager
     tint2 & #minimal, menu-less task bar
@@ -87,7 +89,7 @@ Here's an example of how I'd likely make use of KiLauncher on a kiosk, for insta
 
 - Configure my kiosk to auto-login to my kiosk user and use its custom session.
 
-More info on setting up kiosk systems on Linux can be found on the author's blog: 
+More info on setting up kiosk systems on Linux can be found on the author's blog:
 
 http://www.alandmoore.com/blog/2011/11/05/creating-a-kiosk-with-linux-and-x11-2011-edition
 
@@ -105,4 +107,3 @@ License
 =======
 
 KiLauncher, its documentation, and sample config files are released under the GNU GPL v3.  Please see the included COPYING file for details.
-  
