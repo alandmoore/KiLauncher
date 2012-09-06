@@ -61,7 +61,6 @@ At minimum, a configuration file needs to contain:
 - at least one tab in the array
 - at least one launcher in the tab
 
-
 Global options
 ++++++++++++++
 
@@ -83,6 +82,7 @@ Tab Options
 A tab is a single entry in the "tabs_and_launchers" dictionary.  They key for each tab can be anything, but it's only used for sorting the tabs, so it's probably best just to use ordinal integers or something else easy to sort.
 
 Each tab can define the following options:
+
 ================== ========================================================================================================================================================================================
 Option             Description
 ================== ========================================================================================================================================================================================
