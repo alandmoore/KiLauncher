@@ -123,7 +123,7 @@ Stylesheet
 
 The stylesheet.css file is where the style info is kept.  It uses QT Stylesheet code, NOT regular CSS.  It's close, but the former is a subset so not everything works, and some things don't work like you'd expect.
 
-The included example stylesheets should give you a good starting point for styling the application.  To learn more about QT stylesheets and what's supported, see `http://qt-project.org/doc/qt-4.8/stylesheet-reference.html`_.
+The included example stylesheets should give you a good starting point for styling the application.  To learn more about QT stylesheets and what's supported, see http://qt-project.org/doc/qt-4.8/stylesheet-reference.html.
 
 
 Command line options
