@@ -65,15 +65,17 @@ At minimum, a configuration file needs to contain:
 Global options
 ++++++++++++++
 
-===============        ================  =============================================================================
-Option                 Default           Description
-===============        ================  =============================================================================
-stylesheet             "stylesheet.css"  Path to a stylesheet to use
-icon_theme             (empty)           Name of an icon theme to use when only an icon name is specified
-show_quit_button       false             If true, show a button on the top right to allow the user to quit
-quit_button_text       "X"               The text to display on the quit button, if it's shown.
-aggressive_icon_search false             If true, do a comprehensive recursive search to find icons for each launcher.
-====================== ================  =============================================================================
+These options can be specified anywhere in the configuration file.
+
+====================== ================ =============================================================================
+Option                 Default          Description
+====================== ================ =============================================================================
+stylesheet             "stylesheet.css" Path to a stylesheet to use
+icon_theme             (empty)          Name of an icon theme to use when only an icon name is specified
+show_quit_button       false            If true, show a button on the top right to allow the user to quit
+quit_button_text       "X"              The text to display on the quit button, if it's shown.
+aggressive_icon_search false            If true, do a comprehensive recursive search to find icons for each launcher.
+====================== ================ =============================================================================
 
 Tab Options
 +++++++++++
@@ -93,6 +95,7 @@ launcher_size      This is a set of dimensions in the format <width>x<height>, e
 icon_size          This is a set of dimensions in the format <width>x<height>, e.g. 75x50, which determine the size of the icons on the launcher buttons.
 launchers          This is an array of launcher specifications; see the next section for details.
 ================== ========================================================================================================================================================================================
+
 
 Launcher Options
 ++++++++++++++++
