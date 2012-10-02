@@ -1,8 +1,10 @@
 #!/usr/bin/python
-# KiLauncher static fullscreen launcher menu
-# By Alan D Moore
-# Copyright 2012
-# Released under the GNU GPL v3
+"""
+KiLauncher static fullscreen launcher menu
+By Alan D Moore
+Copyright 2012
+Released under the GNU GPL v3
+"""
 
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
@@ -22,7 +24,10 @@ def recursive_find(rootdir, myfilename):
 
 
 def icon_anyway_you_can(icon_name, recursive_search=True):
-    """Takes an icon name or path, and returns a QIcon any way it can"""
+    """
+    Takes an icon name or path,
+    and returns a QIcon any way it can
+    """
     icon = None
     if os.path.isfile(icon_name):
         icon = QIcon(icon_name)
@@ -34,27 +39,34 @@ def icon_anyway_you_can(icon_name, recursive_search=True):
         #Last ditch effort
         #search through some known (Linux) icon locations
         #This recursive search is really slow, hopefully it can be avoided.
-        print("Warning: had to recursively search for icon \"%s\".  Please set a full path to the correct file to reduce startup time." % icon_name)
-        directories = ["/usr/share/pixmaps", "/usr/share/icons", "/usr/share/icons/hicolor", "/usr/share/" + icon_name]
-        extensions = ["", ".png", ".xpm", ".svg", ".jpg", ".jpeg", ".bmp", ".tiff", ".tif", ".ico"]
+        sys.stderr.write("Warning: had to recursively search for icon \"%s\".  "
+        "Please set a full path to the correct file to reduce startup time." % icon_name)
+        directories = ["/usr/share/pixmaps",
+                       "/usr/share/icons",
+                       "/usr/share/icons/hicolor",
+                       "/usr/share/" + icon_name]
+        extensions = ["", ".png", ".xpm", ".svg",
+                      ".jpg", ".jpeg", ".bmp", ".tiff", ".tif", ".ico"]
         possible_filenames = [icon_name + extension for extension in extensions]
         for directory in directories:
             for filename in possible_filenames:
                 paths = recursive_find(directory, filename)
                 if paths:
-                    print("(eventually found \"%s\")" % paths[0])
+                    sys.stderr.write("(eventually found \"%s\")" % paths[0])
                     icon = QIcon(paths[0])
                     break
             if icon:
                 break
         if not icon:
-            print("Couldn't find an icon for \"%s\"" % icon_name)
+            sys.stderr.write("Couldn't find an icon for \"%s\"" % icon_name)
     return icon or QIcon()
 
 
 
 class LaunchButton(QPushButton):
-    """This is the actual button you push to launch the program."""
+    """
+    This is the actual button you push to launch the program.
+    """
 
     def __init__(self, parent=None, **kwargs):
         super(LaunchButton, self).__init__(parent)
@@ -95,7 +107,9 @@ class LaunchButton(QPushButton):
 
         # The button's icon, if there is one
         iconpane = QLabel()
-        icon = (self.icon and icon_anyway_you_can(self.icon, kwargs.get("aggressive_icon_search", False))) or QIcon()
+        icon = (self.icon \
+                and icon_anyway_you_can(self.icon, kwargs.get("aggressive_icon_search", False))) \
+                or QIcon()
         pixmap = icon.pixmap(*self.icon_size)
         if not pixmap.isNull():
             pixmap = pixmap.scaled(*self.icon_size)
@@ -121,16 +135,18 @@ class LaunchButton(QPushButton):
         QMessageBox.critical(None, "Command Failed!", "Sorry, this program isn't working!")
 
     def callback(self):
-        # commands are called in a separate thread using QProcess.
-        # This way, they can indicate to us when they are finished, or if they ran correctly, using signals
-        # XDG commands in desktop files sometimes have placeholder arguments like '%u' or '%f'.
-        # We're going to strip these out.
+        """
+        commands are called in a separate thread using QProcess.
+        This way, they can indicate to us when they are finished, or if they ran correctly, using signals
+        XDG commands in desktop files sometimes have placeholder arguments like '%u' or '%f'.
+        We're going to strip these out.
+        """
         self.command = ' '.join(x for x in self.command.split() if x not in ('%f', '%F', '%u', '%U'))
         self.p = QProcess()
         self.connect(self.p, SIGNAL("finished(int)"), self.enable)
         self.connect(self.p, SIGNAL("error(QProcess::ProcessError)"), self.enable_with_error)
         self.p.start(self.command)
-        if not self.p.state == QProcess.NotRunning:
+        if not self.p.state() == QProcess.NotRunning:
             # Disable the button to prevent users clicking 200 times waiting on a slow program.
             self.setDisabled(True)
 
@@ -175,11 +191,17 @@ class LauncherMenu(QWidget):
 
     def add_launchers_from_path(self, path):
         for desktop_file in glob.glob(path):
-            b = LaunchButton(desktop_file=desktop_file, launcher_size=self.launcher_size, icon_size=self.icon_size, aggressive_icon_search=self.config.get("aggressive_icon_search"))
+            b = LaunchButton(
+                desktop_file=desktop_file,
+                launcher_size=self.launcher_size,
+                icon_size=self.icon_size,
+                aggressive_icon_search=self.config.get("aggressive_icon_search"))
             self.add_launcher_to_layout(b)
 
     def add_launcher_to_layout(self, launcher):
-        self.launcherlayout.addWidget(launcher, self.current_coordinates[0], self.current_coordinates[1])
+        self.launcherlayout.addWidget(launcher,
+                                      self.current_coordinates[0],
+                                      self.current_coordinates[1])
         self.current_coordinates[1] += 1
         if self.current_coordinates[1] % self.columns == 0:
             self.current_coordinates[1] = 0
@@ -195,7 +217,7 @@ class KiLauncher(QTabWidget):
         self.aggressive_icon_search = config.get("aggressive_icon_search")
         self.stylesheet = kwargs.get("stylesheet") or config.get("stylesheet", 'stylesheet.css')
         if not os.path.exists(self.stylesheet):
-            print("Warning: stylesheet file %s could not be located.  Using default style." % self.stylesheet)
+            sys.stderr.write("Warning: stylesheet file %s could not be located.  Using default style." % self.stylesheet)
             self.stylesheet = None
         #Ideally, the menu should be full screen, but always stay beneath other windows
         self.setWindowState(Qt.WindowFullScreen)
@@ -216,7 +238,8 @@ class KiLauncher(QTabWidget):
             self.init_tabs()
         else:
             self.setLayout(QHBoxLayout())
-            self.layout().addWidget(QLabel("No tabs were configured.  Please check your configuration file."))
+            self.layout().addWidget(QLabel("No tabs were configured.  "
+                                           "Please check your configuration file."))
 
         #Quit button
         if (config.get("show_quit_button")):
@@ -227,6 +250,29 @@ class KiLauncher(QTabWidget):
 
         #Since tabs are not dynamic, just hide them if there's only one.
         self.tabBar().setVisible(len(self.tabs) > 1)
+
+        # Run the "autostart" commands
+        self.autostart = config.get("autostart", False)
+        if self.autostart:
+            self.procs = {}
+            for command in self.autostart:
+                self.procs[command] = QProcess()
+                self.procs[command].start(command)
+                self.connect(self.procs[command], SIGNAL("error(QProcess::ProcessError)"), self.command_error)
+
+    def command_error(self, error):
+        """Called when an autostart has an error"""
+        proc = self.sender()
+        command = [k for k,v in self.procs.iteritems() if v== proc][0]
+        sys.stderr.write("""Command "%s" failed with error: %s. """ % (command, error))
+
+    def close(self):
+        """Overridden to do some cleanup first."""
+        # Close our auto-started processes.
+        if self.autostart:
+            for name, process in self.procs.items():
+                process.close()
+        super(KiLauncher, self).close()
 
     def init_tabs(self):
         for tabordinal, launchers in sorted(self.tabs.items()):
@@ -247,14 +293,22 @@ if __name__ == '__main__':
             config_file = config_location
     app = QApplication(sys.argv)
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--config", action="store", dest="config", default=None, help="The configuration file to use.")
-    parser.add_argument("-s", "--stylesheet", action="store", dest="stylesheet", default=None, help="Override the stylesheet in the config file.")
+    parser.add_argument("-c", "--config",
+                        action="store",
+                        dest="config",
+                        default=None,
+                        help="The configuration file to use.")
+    parser.add_argument("-s",
+                        "--stylesheet",
+                        action="store",
+                        dest="stylesheet",
+                        default=None,
+                        help="Override the stylesheet in the config file.")
     args = parser.parse_args()
     config_file = args.config or os.path.expanduser(config_file)
     if not config_file:
-        print("No config file found or specified; exiting")
+        sys.stderr.write("No config file found or specified; exiting")
         sys.exit(1)
-    print(config_file)
     config = yaml.safe_load(open(config_file, 'r'))
     l = KiLauncher(config, stylesheet=args.stylesheet)
     l.show()

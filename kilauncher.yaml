@@ -39,6 +39,11 @@ quit_button_text: "Quit this program"
 # aggressive_icon_search: True
 
 
+# The "autostart" feature lets you specify some commands to run whenever KiLauncher is launched.
+# This could be useful if you want to run a window manager or panel, for instance.
+
+#autostart: ["openbox", "xeyes", "xterm -e htop"]
+
 ######################
 # Tabs and Launchers #
 ######################
@@ -63,9 +68,9 @@ tabs_and_launchers:
       comment: "Access the Internet"
       icon: "chromium-browser"
       command: "chromium-browser"
-    
+
     # You can do terminal commands to, using "xterm -e"
-    - 
+    -
       name: "Ping Debian.org"
       comment: "Check if it's alive and well"
       icon: "/usr/share/pixmaps/debian-logo.png"
@@ -79,7 +84,7 @@ tabs_and_launchers:
       command: "xdg-open http://www.alandmoore.com/blog"
 
     # Alternately, if you have a .desktop file for the application, specify it (and only it)
-    - 
+    -
       desktop_file: "/usr/share/applications/firefox.desktop"
       #but you can still override individual aspects of the file
       icon: "/usr/share/pixmaps/firefox.png"
@@ -98,10 +103,10 @@ tabs_and_launchers:
     # Also note the use of the wildcard character in the name.  That's allowed.
     # keep in mind, you have no control over the ordering if you go this route.
     desktop_path: "/usr/share/applications/b*.desktop"
-   
+
     # Once again, a descriptive comment
     description: "These are all the programs I could find on your system that begin with the letter B."
-    # Tabs can also specify 
+    # Tabs can also specify
     #  - the maximum number of launchers in a row,
     #  - the size of the launchers
     #  - the size of the icons on the launcher
@@ -119,4 +124,3 @@ tabs_and_launchers:
 #    icon_size: 48x48
 #    launchers_per_row: 6
 #    launcher_size: 180x96
-

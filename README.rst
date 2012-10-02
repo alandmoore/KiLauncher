@@ -32,6 +32,9 @@ What KiLauncher is NOT
 ~~~~~~~~~~~~~~~~~~~~~~
 
 - It's not a desktop environment, window manager, task manager, or desktop shell.  Just a launcher.
+
+  - Well, ok, you *could* use it as a desktop shell/environment if you ran a window manager in its autostart list.
+
 - It's not a total lockdown solution.  You still need to address the lockdown of your desktop, launched programs, etc.
 - It's not a dynamically-updating menu replacement that will automagically configure new launchers for you.
 - It's not tested on platforms other than GNU/Linux on a regular basis.
@@ -74,7 +77,12 @@ icon_theme             (empty)          Name of an icon theme to use when only a
 show_quit_button       false            If true, show a button on the top right to allow the user to quit
 quit_button_text       "X"              The text to display on the quit button, if it's shown.
 aggressive_icon_search false            If true, do a comprehensive recursive search to find icons for each launcher.
+autostart              (empty)          A list of commands to run when KiLauncher is started.
 ====================== ================ =============================================================================
+
+Autostart commands will be run in order of appearance in the background when KiLuancher is started, and closed when KiLauncher quits (using the quit button).  Possible uses for autostart might be launching a window manager, panel, timer, logging script, etc.
+
+If an autostart command fails, the failure is logged to stderr and KiLauncher continues running.
 
 Tab Options
 +++++++++++
@@ -159,6 +167,8 @@ Here's an example of how I'd likely make use of KiLauncher on a kiosk.
     openbox & #simple, minimal window manager
     tint2 & #minimal, menu-less task bar
     python kilauncher -c /etc/kilauncher.yaml -s /etc/stylesheet.css
+
+  - Alternately, I could just run the first four commands using KiLauncher's "autostart" option, and just have the last line in .xsession
 
 - Configure my kiosk to auto-login to my kiosk user and use its custom session.
 
