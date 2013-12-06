@@ -151,6 +151,7 @@ class LaunchButton(QPushButton):
             self.setDisabled(True)
 
 
+
 class LauncherMenu(QWidget):
     """This is a single pane of launchers on a tab"""
     def __init__(self, config, parent=None):
@@ -215,7 +216,7 @@ class KiLauncher(QTabWidget):
         self.setObjectName("KiLauncher")
         self.tabBar().setObjectName("TabBar")
         self.aggressive_icon_search = config.get("aggressive_icon_search")
-        self.stylesheet = kwargs.get("stylesheet") or config.get("stylesheet", 'stylesheet.css')
+        self.stylesheet = kwargs.get("stylesheet") or config.get("stylesheet", '/etc/kilauncher/stylesheet.css')
         if not os.path.exists(self.stylesheet):
             sys.stderr.write("Warning: stylesheet file %s could not be located.  Using default style." % self.stylesheet)
             self.stylesheet = None
@@ -228,7 +229,8 @@ class KiLauncher(QTabWidget):
 
         # Setup the appearance
         if self.stylesheet:
-            self.setStyleSheet(open(self.stylesheet, 'r').read())
+            with open(self.stylesheet, 'r') as s:
+                self.setStyleSheet(s.read())
         if config.get("icon_theme"):
             QIcon.setThemeName(config.get("icon_theme"))
 
@@ -286,7 +288,7 @@ class KiLauncher(QTabWidget):
                 self.addTab(lm, launchers.get("name"))
 
 if __name__ == '__main__':
-    config_locations = ['/etc/kilauncher.yaml', '~/.kilauncher.yaml']
+    config_locations = ['/etc/kilauncher/kilauncher.yaml', '/etc/kilauncher.yaml', '~/.kilauncher.yaml']
     config_file = ''
     for config_location in config_locations:
         if os.path.exists(os.path.expanduser(config_location)):
@@ -309,7 +311,8 @@ if __name__ == '__main__':
     if not config_file:
         sys.stderr.write("No config file found or specified; exiting")
         sys.exit(1)
-    config = yaml.safe_load(open(config_file, 'r'))
+    with open(config_file, 'r') as c:
+        config = yaml.safe_load(c)
     l = KiLauncher(config, stylesheet=args.stylesheet)
     l.show()
     app.exec_()

@@ -10,7 +10,7 @@
 
 # Stylesheet
 # Change this to use a custom stylesheet, or change the location of your stylesheet
-# Default: stylesheet.css
+# Default: /etc/kilauncher/stylesheet.css
 
 stylesheet: "stylesheet.css"
 
