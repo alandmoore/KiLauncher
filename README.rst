@@ -56,7 +56,7 @@ Configuration file
 
 The kilauncher.yaml file is an example configuration file, and is well commented to show how shortcuts can be configured.  Basically, you can give it directories full of .desktop files, individual .desktop files, or explicit name/comment/icon/command values to define launchers for each tab.
 
-If a config file is not specified on the command line, kilauncher will use ~/.kilauncher.yaml.  If that doesn't exist, it will use /etc/kilauncher.yaml.  If neither location exists and a file isn't specified, the program will just print an error to stdout and exit.
+If a config file is not specified on the command line, kilauncher will use ~/.kilauncher.yaml.  If that doesn't exist, it will check /etc/kilauncher.yaml and then /etc/kilauncher/kilauncher.yaml.  If none of those locations exist and a file isn't specified, the program will just print an error to stderr and exit.
 
 At minimum, a configuration file needs to contain:
 
@@ -69,16 +69,16 @@ Global options
 
 These options can be specified anywhere in the configuration file.
 
-====================== ================ =============================================================================
-Option                 Default          Description
-====================== ================ =============================================================================
-stylesheet             "stylesheet.css" Path to a stylesheet to use
-icon_theme             (empty)          Name of an icon theme to use when only an icon name is specified
-show_quit_button       false            If true, show a button on the top right to allow the user to quit
-quit_button_text       "X"              The text to display on the quit button, if it's shown.
-aggressive_icon_search false            If true, do a comprehensive recursive search to find icons for each launcher.
-autostart              (empty)          A list of commands to run when KiLauncher is started.
-====================== ================ =============================================================================
+====================== ================================ =============================================================================
+Option                 Default                          Description
+====================== ================================ =============================================================================
+stylesheet             "/etc/kilauncher/stylesheet.css" Path to a stylesheet to use
+icon_theme             (empty)                          Name of an icon theme to use when only an icon name is specified
+show_quit_button       false                            If true, show a button on the top right to allow the user to quit
+quit_button_text       "X"                              The text to display on the quit button, if it's shown.
+aggressive_icon_search false                            If true, do a comprehensive recursive search to find icons for each launcher.
+autostart              (empty)                          A list of commands to run when KiLauncher is started.
+====================== ================================ =============================================================================
 
 Autostart commands will be run in order of appearance in the background when KiLuancher is started, and closed when KiLauncher quits (using the quit button).  Possible uses for autostart might be launching a window manager, panel, timer, logging script, etc.
 
@@ -153,20 +153,20 @@ How I'd likely use it
 Here's an example of how I'd likely make use of KiLauncher on a kiosk.
 
 - Set up a basic Linux system, create a kiosk user
-- create my custom kilauncher.yaml file, and place it in /etc
+- create my custom kilauncher.yaml file, and place it in /etc/kilauncher/
 
   - The easiest way, if you're just launching regular applications, is either copying .desktop files from /usr/share/applications into a folder then specifying that directory in the tab's desktop_directory option.
   - Alternately, you can just leave them in /usr/share/applications and manually specify them in the launcher list using desktop_file.
   - If you have a bunch of custom scripts or custom applications, it's probably easier to specify the name/icon/description/command manually in the launcher list.
 
-- (optionally) customize stylesheet.css, and maybe put it with kilauncher.yaml in /etc
+- (optionally) customize stylesheet.css, and maybe put it with kilauncher.yaml in /etc/kilauncher/
 - In my kiosk user's home directory, create a .xsession file like so::
 
     xset s off
     xset -dpms
     openbox & #simple, minimal window manager
     tint2 & #minimal, menu-less task bar
-    python kilauncher -c /etc/kilauncher.yaml -s /etc/stylesheet.css
+    python kilauncher -c /etc/kilauncher/kilauncher.yaml -s /etc/kilauncher/stylesheet.css
 
   - Alternately, I could just run the first four commands using KiLauncher's "autostart" option, and just have the last line in .xsession
 

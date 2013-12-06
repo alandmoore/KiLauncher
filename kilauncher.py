@@ -76,12 +76,16 @@ class LaunchButton(QPushButton):
         self.name, self.comment, self.icon, self.command = None, None, None, None
 
         # Load in details from a .desktop file, if there is one.
-        if kwargs.get("desktop_file"):
-            de = DesktopEntry(kwargs.get("desktop_file"))
-            self.name = de.getName()
-            self.comment = de.getComment()
-            self.icon = de.getIcon()
-            self.command = de.getExec()
+        desktop_file = kwargs.get("desktop_file")
+        if desktop_file:
+            if os.access(desktop_file, os.R_OK):
+                de = DesktopEntry(desktop_file)
+                self.name = de.getName()
+                self.comment = de.getComment()
+                self.icon = de.getIcon()
+                self.command = de.getExec()
+            else:
+                sys.stderr.write("Read access denied on manually-specified desktop file %s.  Button may be missing data.\n" % desktop_file)
 
         # This allows for overriding the settings in DesktopEntry
         self.name = kwargs.get("name", self.name)
@@ -192,12 +196,15 @@ class LauncherMenu(QWidget):
 
     def add_launchers_from_path(self, path):
         for desktop_file in glob.glob(path):
-            b = LaunchButton(
-                desktop_file=desktop_file,
-                launcher_size=self.launcher_size,
-                icon_size=self.icon_size,
-                aggressive_icon_search=self.config.get("aggressive_icon_search"))
-            self.add_launcher_to_layout(b)
+            if os.access(desktop_file, os.R_OK):
+                b = LaunchButton(
+                    desktop_file=desktop_file,
+                    launcher_size=self.launcher_size,
+                    icon_size=self.icon_size,
+                    aggressive_icon_search=self.config.get("aggressive_icon_search"))
+                self.add_launcher_to_layout(b)
+            else:
+                sys.stderr.write("Read access denied for %s in specified path %s.  Skipping.\n" % (desktop_file, path))
 
     def add_launcher_to_layout(self, launcher):
         self.launcherlayout.addWidget(launcher,
