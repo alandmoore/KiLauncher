@@ -129,8 +129,8 @@ class LaunchButton(QPushButton):
         self.setMinimumSize(QSize(*self.launcher_size))
 
         # Connect the callback
-        self.connect(self, SIGNAL("clicked()"), self.callback)
-
+        self.clicked.connect(self.callback)
+        
     def enable(self, exit_code):
         self.setDisabled(False)
 
@@ -147,8 +147,8 @@ class LaunchButton(QPushButton):
         """
         self.command = ' '.join(x for x in self.command.split() if x not in ('%f', '%F', '%u', '%U'))
         self.p = QProcess()
-        self.connect(self.p, SIGNAL("finished(int)"), self.enable)
-        self.connect(self.p, SIGNAL("error(QProcess::ProcessError)"), self.enable_with_error)
+        self.p.finished.connect(self.enable)
+        self.p.error.connect(self.enable_with_error)
         self.p.start(self.command)
         if not self.p.state() == QProcess.NotRunning:
             # Disable the button to prevent users clicking 200 times waiting on a slow program.
@@ -264,8 +264,7 @@ class KiLauncher(QTabWidget):
                 self.setCornerWidget(self.quit_button)
             else:
                 self.widget(0).description_layout.addWidget(self.quit_button)
-            self.connect(self.quit_button, SIGNAL("clicked()"), self.close)
-
+            self.quit_button.clicked.connect(self.close)
 
         # Run the "autostart" commands
         self.autostart = config.get("autostart", False)
@@ -274,8 +273,8 @@ class KiLauncher(QTabWidget):
             for command in self.autostart:
                 self.procs[command] = QProcess()
                 self.procs[command].start(command)
-                self.connect(self.procs[command], SIGNAL("error(QProcess::ProcessError)"), self.command_error)
-
+                self.procs[command].error.connect(self.command_error)
+                
     def command_error(self, error):
         """Called when an autostart has an error"""
         proc = self.sender()
