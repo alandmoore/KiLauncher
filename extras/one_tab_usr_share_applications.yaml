@@ -1,0 +1,7 @@
+show_quit_button: True
+tabs_and_launchers:
+  1:
+    #name: "Applications"
+    description: "All applications"
+    icon_size: 48x48
+    desktop_path: "/usr/share/applications/*.desktop"

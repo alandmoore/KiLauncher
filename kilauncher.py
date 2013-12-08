@@ -164,9 +164,12 @@ class LauncherMenu(QWidget):
         self.launcherlayout = QGridLayout()
         self.layout = QVBoxLayout()
         # Show the description
+        self.description_layout = QHBoxLayout()
         self.descriptionLabel = QLabel(self.config.get("description"))
         self.descriptionLabel.setObjectName("TabDescription")
-        self.layout.addWidget(self.descriptionLabel)
+        self.descriptionLabel.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Maximum)
+        self.description_layout.addWidget(self.descriptionLabel)
+        self.layout.addItem(self.description_layout)
         self.scroller = QScrollArea()
         self.scroller.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.scroller.setWidgetResizable(True)
@@ -249,16 +252,20 @@ class KiLauncher(QTabWidget):
             self.setLayout(QHBoxLayout())
             self.layout().addWidget(QLabel("No tabs were configured.  "
                                            "Please check your configuration file."))
+        #Since tabs are not dynamic, just hide them if there's only one.
+        show_tabbar = len(self.tabs) > 1
+        self.tabBar().setVisible(show_tabbar)
 
         #Quit button
         if (config.get("show_quit_button")):
-            self.quit_button = QPushButton(config.get("quit_button_text") or "X")
+            self.quit_button = QPushButton(config.get("quit_button_text") or "X", parent=self)
             self.quit_button.setObjectName("QuitButton")
-            self.setCornerWidget(self.quit_button)
+            if show_tabbar:
+                self.setCornerWidget(self.quit_button)
+            else:
+                self.widget(0).description_layout.addWidget(self.quit_button)
             self.connect(self.quit_button, SIGNAL("clicked()"), self.close)
 
-        #Since tabs are not dynamic, just hide them if there's only one.
-        self.tabBar().setVisible(len(self.tabs) > 1)
 
         # Run the "autostart" commands
         self.autostart = config.get("autostart", False)
@@ -287,12 +294,13 @@ class KiLauncher(QTabWidget):
         for tabordinal, launchers in sorted(self.tabs.items()):
             launchers["aggressive_icon_search"] = self.aggressive_icon_search
             lm = LauncherMenu(launchers)
+            launcher_name = launchers.get("name", "Tab %d" % tabordinal)
             if launchers.get("icon"):
                 icon = launchers.get("icon")
                 icon = icon_anyway_you_can(icon, False)
-                self.addTab(lm, icon, launchers.get("name"))
+                self.addTab(lm, icon, launcher_name)
             else:
-                self.addTab(lm, launchers.get("name"))
+                self.addTab(lm, launcher_name)
 
 if __name__ == '__main__':
     config_locations = ['/etc/kilauncher/kilauncher.yaml', '/etc/kilauncher.yaml', '~/.kilauncher.yaml']

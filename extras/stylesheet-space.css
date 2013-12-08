@@ -1,0 +1,61 @@
+/* This is not regular HTML-stle CSS, it's QT Stylesheet CSS */
+/* For a reference of supported features, see http://qt-project.org/doc/qt-4.8/stylesheet-reference.html */
+
+/* KiLauncher will style the main application background, etc.  ::pane defines the area under the tabs. */ 
+#KiLauncher { background-color: #333333; }
+#KiLauncher::pane { 
+                    background-color: qlineargradient(x1:0,y1:0, x2:0, y2: 1, stop:0 silver, stop:.1 #333333, stop:1 grey);
+                    border: 2px double black; 
+                    }
+
+/* TabBar will style the text in the tabs along the top */
+#TabBar {   
+          font-size: 18px; 
+          font-weight: bold; 
+          color: black; 
+          font-family: sans;
+          }
+
+#TabBar::tab { 
+               border: 2px outset cyan; 
+               border-radius: 10px; 
+               padding: 4px;
+               margin: 2px;
+               color: cyan; 
+               background-color: qlineargradient(spread: reflect, x1:0, y1: 0, x2: 0, y2: 1, stop: 0 rgba(0, 0, 0, 35%), stop: .1 rgba(200, 200, 200, 60%), stop: .3 rgba(0, 0, 0, 50%)) }
+
+#TabBar::tab:selected { 
+                        background-color: darkred;
+                        }
+#TabBar::tab { background-color: red; }
+
+/* TabDescription styles the descriptive text at the top of the tab */
+#TabDescription { 
+                  color: white; 
+                  font-size: 16px;
+                  font-family: sans;
+                  text-align: center; 
+                  padding: 20px; 
+                  }
+
+/* LauncherPane styles the background for the scrollable area where the launchers live  */
+#LauncherPane { 
+                background-color: black;
+                background-image: url("extras/ngc_4414_nasa.jpg");
+                }
+
+/* LaunchButton styles the actual buttons for the launchers.  :hover and :pressed style the buttons when hovered or pressed, respectively  */
+#LaunchButton {  
+                background-color: qlineargradient(spread: reflect, x1:0, y1: 0, x2: 0, y2: 1, stop: 0 rgba(0, 0, 0, 35%), stop: .1 rgba(200, 200, 200, 60%), stop: .3 rgba(0, 0, 0, 50%)) ; 
+                border: 4px outset cyan; border-radius: 40px; 
+                padding: 12px;
+                }
+#LaunchButton:hover  { border: 4px outset #F7D52A;  }
+#LaunchButton:pressed  { background-color: #F7D52A; }
+
+/* LaunchButtonTitle and LaunchButtonDescription style the text in the launchers */
+#LaunchButtonTitle { color: cyan; font-size: 12px; font-weight: bold; text-decoration: underline; padding: 4px; }
+#LaunchButtonDescription { color: cyan; font-size: 10px; font-style: italic; }
+
+#QuitButton { border: 2px outset cyan; border-radius: 10px; padding: 4px; color: cyan; background-color: qlineargradient(spread: reflect, x1:0, y1: 0, x2: 0, y2: 1, stop: 0 rgba(0, 0, 0, 35%), stop: .1 rgba(200, 200, 200, 60%), stop: .3 rgba(0, 0, 0, 50%)) }
+#QuitButton:hover { border-color: #F7D52A; color: #F7D52A;  }
