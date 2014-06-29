@@ -6,8 +6,34 @@ Copyright 2012
 Released under the GNU GPL v3
 """
 
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
+while True:
+    try:
+        from PyQt5.QtCore import *
+        from PyQt5.QtGui import *
+        from PyQt5.QtWidgets import *
+        print("Using PyQt5")
+        break
+    except ImportError:
+        print("No Qt5; trying Qt4")
+        pass
+    try:
+        from PyQt4.QtGui import *
+        from PyQt4.QtCore import *
+        print("Using PyQt4")
+        break
+    except ImportError:
+        print("No Qt4; Trying PySide")
+        pass
+    try:
+        from PySide.QtGui import *
+        from PySide.QtCore import *
+        print("Using PySide")
+        break
+    except ImportError:
+        print("No QT bindings found.  Exiting.")
+        exit()
+        pass
+
 from xdg.DesktopEntry import DesktopEntry
 
 import sys
