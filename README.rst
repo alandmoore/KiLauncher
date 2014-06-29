@@ -43,7 +43,7 @@ Requirements
 ============
 
 - python (should work with python 3.x or any recent python 2.x)
-- pyqt4
+- PyQt4, PyQt5, or PySide
 - python-yaml
 - python-xdg
 - python-argparse
@@ -80,7 +80,7 @@ aggressive_icon_search false                            If true, do a comprehens
 autostart              (empty)                          A list of commands to run when KiLauncher is started.
 ====================== ================================ =============================================================================
 
-Autostart commands will be run in order of appearance in the background when KiLuancher is started, and closed when KiLauncher quits (using the quit button).  Possible uses for autostart might be launching a window manager, panel, timer, logging script, etc.
+Autostart commands will be run in order of appearance in the background when KiLauncher is started, and closed when KiLauncher quits (using the quit button).  Possible uses for autostart might be launching a window manager, panel, timer, logging script, etc.
 
 If an autostart command fails, the failure is logged to stderr and KiLauncher continues running.
 
