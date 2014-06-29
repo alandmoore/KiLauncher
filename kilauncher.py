@@ -309,13 +309,12 @@ class KiLauncher(QTabWidget):
             self.quit_button.clicked.connect(self.close)
 
         # Run the "autostart" commands
-        self.autostart = config.get("autostart", False)
-        if self.autostart:
-            self.procs = {}
-            for command in self.autostart:
-                self.procs[command] = QProcess()
-                self.procs[command].start(command)
-                self.procs[command].error.connect(self.command_error)
+        self.autostart = config.get("autostart", [])
+        self.procs = {}
+        for command in self.autostart:
+            self.procs[command] = QProcess()
+            self.procs[command].start(command)
+            self.procs[command].error.connect(self.command_error)
                 
     def command_error(self, error):
         """Called when an autostart has an error"""
@@ -326,9 +325,8 @@ class KiLauncher(QTabWidget):
     def close(self):
         """Overridden from QWidget to do some cleanup before closing."""
         # Close our auto-started processes.
-        if self.autostart:
-            for name, process in self.procs.items():
-                process.close()
+        for name, process in self.procs.items():
+            process.close()
         super(KiLauncher, self).close()
 
     def init_tabs(self):
