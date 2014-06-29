@@ -64,8 +64,10 @@ def icon_anyway_you_can(icon_name, recursive_search=True):
         #Last ditch effort
         #search through some known (Linux) icon locations
         #This recursive search is really slow, hopefully it can be avoided.
-        sys.stderr.write("Warning: had to recursively search for icon \"%s\".  "
-        "Please set a full path to the correct file to reduce startup time." % icon_name)
+        sys.stderr.write(
+            """Warning: had to recursively search for icon "{}".
+            Please set a full path to the correct file to reduce startup time."""
+            .format(icon_name))
         directories = ["/usr/share/pixmaps",
                        "/usr/share/icons",
                        "/usr/share/icons/hicolor",
@@ -77,13 +79,15 @@ def icon_anyway_you_can(icon_name, recursive_search=True):
             for filename in possible_filenames:
                 paths = recursive_find(directory, filename)
                 if paths:
-                    sys.stderr.write("(eventually found \"%s\")" % paths[0])
+                    sys.stderr.write(
+                        "(eventually found \"{}\")".format(paths[0]))
                     icon = QIcon(paths[0])
                     break
             if icon:
                 break
         if not icon:
-            sys.stderr.write("Couldn't find an icon for \"%s\"" % icon_name)
+            sys.stderr.write(
+                """Couldn't find an icon for "{}".""".format(icon_name))
     return icon or QIcon()
 
 
@@ -110,8 +114,10 @@ class LaunchButton(QPushButton):
                 self.icon = de.getIcon()
                 self.command = de.getExec()
             else:
-                sys.stderr.write("Read access denied on manually-specified "
-                "desktop file %s.  Button may be missing data.\n" % desktop_file)
+                sys.stderr.write(
+                    "Read access denied on manually-specified "
+                    "desktop file {}.  Button may be missing data.\n"
+                    .format(desktop_file))
 
         # This allows for overriding the settings in DesktopEntry
         self.name = kwargs.get("name", self.name)
@@ -216,12 +222,16 @@ class LauncherMenu(QWidget):
         self.launcher_widget.setLayout(self.launcherlayout)
         self.layout.addWidget(self.scroller)
         self.setLayout(self.layout)
-        self.launcher_size = (config.get("launcher_size") and 
-            [int(x) for x in config.get("launcher_size").split('x')]) or [240, 80]
+        self.launcher_size = (
+            config.get("launcher_size") and 
+            [int(x) for x in config.get("launcher_size").split('x')]
+            ) or [240, 80]
         self.icon_size = (config.get("icon_size") and 
             [int(x) for x in config.get("icon_size").split('x')]) or [64, 64]
-        # figure out the default number of columns by dividing the launcher width by the screen width.
-        # Of course, if that's zero (if the launcher is actually wider than the viewport) make it 1
+        # figure out the default number of columns by dividing the 
+        # launcher width by the screen width.
+        # Of course, if that's zero (if the launcher is actually wider 
+        # than the viewport) make it 1
         self.default_columns = (qApp.desktop().availableGeometry().width() \
                                 // self.launcher_size[0]) or 1
         self.columns = config.get("launchers_per_row", self.default_columns)
@@ -231,7 +241,8 @@ class LauncherMenu(QWidget):
         for launcher in self.config.get("launchers", []):
             launcher["launcher_size"] = self.launcher_size
             launcher["icon_size"] = self.icon_size
-            launcher["aggressive_icon_search"] = self.config.get("aggressive_icon_search", False)
+            launcher["aggressive_icon_search"] = self.config.get(
+                "aggressive_icon_search", False)
             b = LaunchButton(**launcher)
             self.add_launcher_to_layout(b)
         self.scroller.setWidget(self.launcher_widget)
@@ -244,10 +255,13 @@ class LauncherMenu(QWidget):
                     desktop_file=desktop_file,
                     launcher_size=self.launcher_size,
                     icon_size=self.icon_size,
-                    aggressive_icon_search=self.config.get("aggressive_icon_search"))
+                    aggressive_icon_search=self.config.get(
+                        "aggressive_icon_search"))
                 self.add_launcher_to_layout(b)
             else:
-                sys.stderr.write("Read access denied for %s in specified path %s.  Skipping.\n" % (desktop_file, path))
+                sys.stderr.write(
+                    ("Read access denied for {} in specified path {}."
+                    "  Skipping.\n").format(desktop_file, path))
 
     def add_launcher_to_layout(self, launcher):
         """Add a launcher object to the pane."""
@@ -268,15 +282,23 @@ class KiLauncher(QTabWidget):
         self.setObjectName("KiLauncher")
         self.tabBar().setObjectName("TabBar")
         self.aggressive_icon_search = config.get("aggressive_icon_search")
-        self.stylesheet = kwargs.get("stylesheet") or config.get("stylesheet", '/etc/kilauncher/stylesheet.css')
+        self.stylesheet = (kwargs.get("stylesheet") 
+                           or config.get("stylesheet", 
+                                         '/etc/kilauncher/stylesheet.css'))
         if not os.path.exists(self.stylesheet):
-            sys.stderr.write("Warning: stylesheet file %s could not be located.  Using default style." % self.stylesheet)
+            sys.stderr.write(
+                "Warning: stylesheet '{}' could not be located.  Using default."
+                .format(self.stylesheet))
             self.stylesheet = None
-        #Ideally, the menu should be full screen, but always stay beneath other windows
+        #Ideally, the menu should be full screen, 
+        # but always stay beneath other windows
         self.setWindowState(Qt.WindowFullScreen)
-        self.setWindowFlags(self.windowFlags()|Qt.WindowStaysOnBottomHint|Qt.FramelessWindowHint)
+        self.setWindowFlags(self.windowFlags()
+                            |Qt.WindowStaysOnBottomHint
+                            |Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_X11NetWmWindowTypeMenu, True)
-        #"fullscreen" doesn't always work, depending on the WM.  This is a workaround.
+        #"fullscreen" doesn't always work, depending on the WM.  
+        #This is a workaround.
         self.resize(qApp.desktop().availableGeometry().size())
 
         # Setup the appearance
@@ -292,15 +314,17 @@ class KiLauncher(QTabWidget):
             self.init_tabs()
         else:
             self.setLayout(QHBoxLayout())
-            self.layout().addWidget(QLabel("No tabs were configured.  "
-                                           "Please check your configuration file."))
+            self.layout().addWidget(
+                QLabel("No tabs were configured.  "
+                       "Please check your configuration file."))
         #Since tabs are not dynamic, just hide them if there's only one.
         show_tabbar = len(self.tabs) > 1
         self.tabBar().setVisible(show_tabbar)
 
         #Quit button
         if (config.get("show_quit_button")):
-            self.quit_button = QPushButton(config.get("quit_button_text") or "X", parent=self)
+            self.quit_button = QPushButton(
+                config.get("quit_button_text") or "X", parent=self)
             self.quit_button.setObjectName("QuitButton")
             if show_tabbar:
                 self.setCornerWidget(self.quit_button)
@@ -320,7 +344,8 @@ class KiLauncher(QTabWidget):
         """Called when an autostart has an error"""
         proc = self.sender()
         command = [k for k,v in self.procs.iteritems() if v== proc][0]
-        sys.stderr.write("""Command "%s" failed with error: %s. """ % (command, error))
+        sys.stderr.write(
+            """Command "{}" failed with error: {}. """.format(command, error))
 
     def close(self):
         """Overridden from QWidget to do some cleanup before closing."""
