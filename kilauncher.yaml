@@ -104,6 +104,11 @@ tabs_and_launchers:
     # keep in mind, you have no control over the ordering if you go this route.
     desktop_path: "/usr/share/applications/b*.desktop"
 
+    # With a desktop path, we can specify a list of categories to include
+    # to include them all, make this falsey or leave it out.
+    # matching is case-insensitive
+    # categories: ["GTK", "Internet"]
+
     # Once again, a descriptive comment
     description: "These are all the programs I could find on your system that begin with the letter B."
     # Tabs can also specify
