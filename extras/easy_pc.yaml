@@ -1,0 +1,42 @@
+# This is a sample configuration for a basic locked-down desktop computer.
+# Simply launching KiLauncher from .xsession will be sufficient.
+# Might be nice for a user with little computing experience, for example.
+
+# You'd need openbox and tint2 installed to take full advantage of this.
+
+icon_theme: "Faenza-dark" # Change this to your favorite theme
+show_quit_button: True
+stylesheet: "extras/stylesheet-space.css"
+# Uncomment these if you're using KiLauncher for your Xsession
+#quit_button_text: "Logout"
+#autostart: ["openbox", "tint2"]
+
+tabs_and_launchers:
+
+  1:
+    name: "Internet"
+    description: "Applications for utilizing the Internet."
+    desktop_path: "/usr/share/applications/"
+    categories: ["instantmessaging", "email", "webbrowser"]
+    launcher_size: 240x120
+
+  2:
+    name: "Office"
+    description: "Applications for productivity and office work."
+    desktop_path: "/usr/share/applications/"
+    categories: ["office"]
+    launcher_size: 240x120
+
+  3:
+    name: "Games"
+    description: "Fun and Games!"
+    desktop_path: "/usr/share/applications"
+    categories: ["game"]
+    launcher_size: 240x120
+
+  4:
+    name: "Multimedia"
+    description: "Programs for Music and Video."
+    desktop_path: "/usr/share/applications"
+    categories: ["audiovideo"]
+    launcher_size: 240x120
