@@ -106,6 +106,7 @@ class LaunchButton(QPushButton):
         self.comment = None
         self.icon = None
         self.command = None
+        self.categories = None
 
         # Load in details from a .desktop file, if there is one.
         desktop_file = kwargs.get("desktop_file")
@@ -116,6 +117,7 @@ class LaunchButton(QPushButton):
                 self.comment = de.getComment()
                 self.icon = de.getIcon()
                 self.command = de.getExec()
+                self.categories = [c.lower() for c in de.getCategories()]
             else:
                 sys.stderr.write(
                     "Read access denied on manually-specified "
@@ -272,6 +274,11 @@ class LauncherMenu(QWidget):
 
     def add_launchers_from_path(self, path):
         """Add launchers to this pane from .desktop files in a given path."""
+        categories = [c.lower() for c in self.config.get("categories")]
+        # if the path is just a directory, we need to add a wildcard to get
+        # the desktop files
+        if os.path.isdir(path):
+            path = os.path.join(path, "*.desktop")
         for desktop_file in glob.glob(path):
             if os.access(desktop_file, os.R_OK):
                 b = LaunchButton(
@@ -280,7 +287,11 @@ class LauncherMenu(QWidget):
                     icon_size=self.icon_size,
                     aggressive_icon_search=self.config.get(
                         "aggressive_icon_search"))
-                self.add_launcher_to_layout(b)
+                if (
+                    not categories
+                    or len([c for c in b.categories if c in categories])
+                ):
+                    self.add_launcher_to_layout(b)
             else:
                 sys.stderr.write(
                     ("Read access denied for {} in specified path {}."

@@ -98,6 +98,7 @@ name               This is the name of the tab, which appears on the tab widget
 description        This is a piece of text which appears at the top of the tab, above the launchers.
 icon               This is an image which will appear on the tab widget, next to the name
 desktop_path       This is a path to a directory of xdg desktop files which will be used to auto-generate the menu.  Globbing can be used here, so for example "/usr/share/applications/*.desktop" works.
+categories         A list of XDG categories. If desktop_path is used, only desktop entries which match any of these categories will be shown.
 launchers_per_row  Normally the program automatically calculates the number of launchers in a row according to available space, but you can hard-code it here to control the layout somewhat.
 launcher_size      This is a set of dimensions in the format <width>x<height>, e.g. 240x180, which determine the size of the launcher buttons.
 icon_size          This is a set of dimensions in the format <width>x<height>, e.g. 75x50, which determine the size of the icons on the launcher buttons.
