@@ -42,6 +42,7 @@ import yaml
 import os
 import argparse
 
+
 def recursive_find(rootdir, myfilename):
     return [os.path.join(rootdir, filename)
             for rootdir, dirnames, filenames in os.walk(rootdir)
@@ -50,7 +51,7 @@ def recursive_find(rootdir, myfilename):
 
 
 def icon_anyway_you_can(icon_name, recursive_search=True):
-    """Take an icon name or path, and take various measures 
+    """Take an icon name or path, and take various measures
     to return a valid QIcon
     """
     icon = None
@@ -66,8 +67,8 @@ def icon_anyway_you_can(icon_name, recursive_search=True):
         #This recursive search is really slow, hopefully it can be avoided.
         sys.stderr.write(
             """Warning: had to recursively search for icon "{}".
-            Please set a full path to the correct file to reduce startup time."""
-            .format(icon_name))
+            Please set a full path to the correct file to reduce startup time.
+            """.format(icon_name))
         directories = ["/usr/share/pixmaps",
                        "/usr/share/icons",
                        "/usr/share/icons/hicolor",
@@ -91,7 +92,6 @@ def icon_anyway_you_can(icon_name, recursive_search=True):
     return icon or QIcon()
 
 
-
 class LaunchButton(QPushButton):
     """ This is the actual button you push to launch the program.
     """
@@ -102,7 +102,10 @@ class LaunchButton(QPushButton):
         self.setObjectName("LaunchButton")
         self.launcher_size = kwargs.get("launcher_size")
         self.icon_size = kwargs.get("icon_size")
-        self.name, self.comment, self.icon, self.command = None, None, None, None
+        self.name = None
+        self.comment = None
+        self.icon = None
+        self.command = None
 
         # Load in details from a .desktop file, if there is one.
         desktop_file = kwargs.get("desktop_file")
@@ -123,7 +126,7 @@ class LaunchButton(QPushButton):
         self.name = kwargs.get("name", self.name)
         self.comment = kwargs.get("comment", self.comment)
         self.icon = kwargs.get("icon", self.icon)
-        self.command =  kwargs.get("command", self.command)
+        self.command = kwargs.get("command", self.command)
 
         # Create the layouts and widgets to hold the information
         toplayout = QHBoxLayout()
@@ -143,9 +146,14 @@ class LaunchButton(QPushButton):
 
         # The button's icon, if there is one
         iconpane = QLabel()
-        icon = (self.icon 
-                and icon_anyway_you_can(self.icon, 
-                    kwargs.get("aggressive_icon_search", False))) or QIcon()
+        icon = (
+            self.icon
+            and icon_anyway_you_can(
+                self.icon,
+                kwargs.get("aggressive_icon_search", False)
+            )
+        ) or QIcon()
+
         pixmap = icon.pixmap(*self.icon_size)
         if not pixmap.isNull():
             pixmap = pixmap.scaled(*self.icon_size)
@@ -162,7 +170,7 @@ class LaunchButton(QPushButton):
 
         # Connect the callback
         self.clicked.connect(self.callback)
-        
+
     def enable(self, exit_code):
         """Enable the button widget"""
         self.setDisabled(False)
@@ -170,31 +178,35 @@ class LaunchButton(QPushButton):
     def enable_with_error(self, error):
         """Enable the button, but display an error."""
         self.setDisabled(False)
-        QMessageBox.critical(None, "Command Failed!", 
-                             "Sorry, this program isn't working!")
+        QMessageBox.critical(
+            None,
+            "Command Failed!",
+            "Sorry, this program isn't working!"
+        )
 
     def callback(self):
         """Run the button's callback function
 
         Commands are called in a separate thread using QProcess.
-        This way, they can indicate to us when they are finished, 
+        This way, they can indicate to us when they are finished,
         or if they ran correctly, using signals.
-        XDG commands in desktop files sometimes have placeholder 
+        XDG commands in desktop files sometimes have placeholder
         arguments like '%u' or '%f'.
         We're going to strip these out, because they have no meaning in the
         context of a button-push.
         """
-        self.command = ' '.join(x for x in self.command.split() 
-                                if x not in ('%f', '%F', '%u', '%U'))
+        self.command = ' '.join(
+            x for x in self.command.split()
+            if x not in ('%f', '%F', '%u', '%U')
+        )
         self.p = QProcess()
         self.p.finished.connect(self.enable)
         self.p.error.connect(self.enable_with_error)
         self.p.start(self.command)
         if not self.p.state() == QProcess.NotRunning:
-            # Disable the button to prevent users clicking 
+            # Disable the button to prevent users clicking
             # 200 times waiting on a slow program.
             self.setDisabled(True)
-
 
 
 class LauncherMenu(QWidget):
@@ -208,8 +220,10 @@ class LauncherMenu(QWidget):
         self.description_layout = QHBoxLayout()
         self.descriptionLabel = QLabel(self.config.get("description"))
         self.descriptionLabel.setObjectName("TabDescription")
-        self.descriptionLabel.setSizePolicy(QSizePolicy.Expanding, 
-                                            QSizePolicy.Maximum)
+        self.descriptionLabel.setSizePolicy(
+            QSizePolicy.Expanding,
+            QSizePolicy.Maximum
+        )
         self.description_layout.addWidget(self.descriptionLabel)
         self.layout.addItem(self.description_layout)
         self.scroller = QScrollArea()
@@ -217,23 +231,32 @@ class LauncherMenu(QWidget):
         self.scroller.setWidgetResizable(True)
         self.launcher_widget = QWidget(self)
         self.launcher_widget.setObjectName("LauncherPane")
-        self.launcher_widget.setSizePolicy(QSizePolicy.Expanding, 
-                                           QSizePolicy.Expanding)
+        self.launcher_widget.setSizePolicy(
+            QSizePolicy.Expanding,
+            QSizePolicy.Expanding
+        )
         self.launcher_widget.setLayout(self.launcherlayout)
         self.layout.addWidget(self.scroller)
         self.setLayout(self.layout)
         self.launcher_size = (
-            config.get("launcher_size") and 
+            config.get("launcher_size") and
             [int(x) for x in config.get("launcher_size").split('x')]
-            ) or [240, 80]
-        self.icon_size = (config.get("icon_size") and 
-            [int(x) for x in config.get("icon_size").split('x')]) or [64, 64]
-        # figure out the default number of columns by dividing the 
+        ) or [240, 80]
+
+        self.icon_size = (
+            config.get("icon_size") and
+            [int(x) for x in config.get("icon_size").split('x')]
+        ) or [64, 64]
+
+        # figure out the default number of columns by dividing the
         # launcher width by the screen width.
-        # Of course, if that's zero (if the launcher is actually wider 
+        # Of course, if that's zero (if the launcher is actually wider
         # than the viewport) make it 1
-        self.default_columns = (qApp.desktop().availableGeometry().width() \
-                                // self.launcher_size[0]) or 1
+        self.default_columns = (
+            qApp.desktop().availableGeometry().width()
+            // self.launcher_size[0]
+        ) or 1
+
         self.columns = config.get("launchers_per_row", self.default_columns)
         self.current_coordinates = [0, 0]
         if self.config.get("desktop_path"):
@@ -261,7 +284,8 @@ class LauncherMenu(QWidget):
             else:
                 sys.stderr.write(
                     ("Read access denied for {} in specified path {}."
-                    "  Skipping.\n").format(desktop_file, path))
+                     "  Skipping.\n").format(desktop_file, path)
+                )
 
     def add_launcher_to_layout(self, launcher):
         """Add a launcher object to the pane."""
@@ -273,6 +297,7 @@ class LauncherMenu(QWidget):
             self.current_coordinates[1] = 0
             self.current_coordinates[0] += 1
 
+
 class KiLauncher(QTabWidget):
     """The main application"""
 
@@ -282,22 +307,29 @@ class KiLauncher(QTabWidget):
         self.setObjectName("KiLauncher")
         self.tabBar().setObjectName("TabBar")
         self.aggressive_icon_search = config.get("aggressive_icon_search")
-        self.stylesheet = (kwargs.get("stylesheet") 
-                           or config.get("stylesheet", 
-                                         '/etc/kilauncher/stylesheet.css'))
+        self.stylesheet = (
+            kwargs.get("stylesheet")
+            or config.get(
+                "stylesheet", '/etc/kilauncher/stylesheet.css'
+            )
+        )
+
         if not os.path.exists(self.stylesheet):
             sys.stderr.write(
                 "Warning: stylesheet '{}' could not be located.  Using default."
                 .format(self.stylesheet))
             self.stylesheet = None
-        #Ideally, the menu should be full screen, 
+
+        #Ideally, the menu should be full screen,
         # but always stay beneath other windows
         self.setWindowState(Qt.WindowFullScreen)
-        self.setWindowFlags(self.windowFlags()
-                            |Qt.WindowStaysOnBottomHint
-                            |Qt.FramelessWindowHint)
+        self.setWindowFlags(
+            self.windowFlags()
+            | Qt.WindowStaysOnBottomHint
+            | Qt.FramelessWindowHint
+        )
         self.setAttribute(Qt.WA_X11NetWmWindowTypeMenu, True)
-        #"fullscreen" doesn't always work, depending on the WM.  
+        #"fullscreen" doesn't always work, depending on the WM.
         #This is a workaround.
         self.resize(qApp.desktop().availableGeometry().size())
 
@@ -339,11 +371,11 @@ class KiLauncher(QTabWidget):
             self.procs[command] = QProcess()
             self.procs[command].start(command)
             self.procs[command].error.connect(self.command_error)
-                
+
     def command_error(self, error):
         """Called when an autostart has an error"""
         proc = self.sender()
-        command = [k for k,v in self.procs.iteritems() if v== proc][0]
+        command = [k for k, v in self.procs.iteritems() if v == proc][0]
         sys.stderr.write(
             """Command "{}" failed with error: {}. """.format(command, error))
 
@@ -359,7 +391,7 @@ class KiLauncher(QTabWidget):
         for tabordinal, launchers in sorted(self.tabs.items()):
             launchers["aggressive_icon_search"] = self.aggressive_icon_search
             lm = LauncherMenu(launchers)
-            launcher_name = launchers.get("name", "Tab %d" % tabordinal)
+            launcher_name = launchers.get("name", "Tab {}".format(tabordinal))
             if launchers.get("icon"):
                 icon = launchers.get("icon")
                 icon = icon_anyway_you_can(icon, False)
@@ -370,9 +402,11 @@ class KiLauncher(QTabWidget):
 if __name__ == '__main__':
 
     # List of places to search for the config file
-    config_locations = ['/etc/kilauncher/kilauncher.yaml', 
-                        '/etc/kilauncher.yaml', 
-                        '~/.kilauncher.yaml']
+    config_locations = [
+        '/etc/kilauncher/kilauncher.yaml',
+        '/etc/kilauncher.yaml',
+        '~/.kilauncher.yaml'
+    ]
     config_file = ''
     for config_location in config_locations:
         if os.path.exists(os.path.expanduser(config_location)):
