@@ -57,7 +57,8 @@ tabs_and_launchers:
   1:
     name: "Example Configuration"
     #It can have some descriptive text, which will be displayed above the launchers
-    description: "This tab contains a (fairly useless) example configuration designed to show all the configuration options.  You'll almost certainly want to edit the configuration file to put in something useful."
+    description: "This tab contains a (fairly useless) example configuration designed to show all the configuration options.  
+    <br/>You'll almost certainly want to edit the configuration file to put in something useful."
     
     #It can also have an icon, which will appear in the tab
     icon: "web-browser"
@@ -122,9 +123,18 @@ tabs_and_launchers:
     launcher_size: 360x120
     icon_size: 96x72
 
+  # This is an example of a tab that filters on categories
+  # this is kind of slow if there's a lot of .desktop files in the directory
+  # but it might be convenient if startup time isn't an issue.
+  3:
+    name: "Multimedia Programs"
+    desktop_path: "/usr/share/applications/"
+    description: "These are the multimedia applications installed on your system."
+    categories: ["audiovideo"]
+    
 # The system can work with large lists of programs too, though it seems to defeat the purpose (uncomment these lines to see it)
 
-#  3:
+#  4:
 #    name: "All your programs"
 #    desktop_path: "/usr/share/applications/*.desktop"
 #    icon_size: 48x48
