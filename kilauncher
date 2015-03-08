@@ -1,0 +1,6 @@
+#!/bin/sh
+
+INSTALL_DIR=/usr/local/share/kilauncher
+
+cd $INSTALL_DIR
+python ./kilauncher.py $@
