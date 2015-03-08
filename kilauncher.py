@@ -274,7 +274,7 @@ class LauncherMenu(QWidget):
 
     def add_launchers_from_path(self, path):
         """Add launchers to this pane from .desktop files in a given path."""
-        categories = [c.lower() for c in self.config.get("categories")]
+        categories = [c.lower() for c in self.config.get("categories", [])]
         # if the path is just a directory, we need to add a wildcard to get
         # the desktop files
         if os.path.isdir(path):
@@ -288,8 +288,8 @@ class LauncherMenu(QWidget):
                     aggressive_icon_search=self.config.get(
                         "aggressive_icon_search"))
                 if (
-                    not categories
-                    or len([c for c in b.categories if c in categories])
+                    not categories or
+                    len([c for c in b.categories if c in categories])
                 ):
                     self.add_launcher_to_layout(b)
             else:
