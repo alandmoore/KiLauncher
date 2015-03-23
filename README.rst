@@ -6,6 +6,8 @@
 A full-screen launcher
 ----------------------
 
+http://www.alandmoore.com/kilauncher/kilauncher.html
+
 Author
 ======
 
