@@ -346,6 +346,7 @@ class KiLauncher(QTabWidget):
         # Put KiLauncher on bottom and prevent it covering other windows
         self.setAttribute(Qt.WA_X11NetWmWindowTypeDesktop)
         self.setAttribute(Qt.WA_X11DoNotAcceptFocus)
+        self.setAttribute(Qt.WA_DeleteOnClose)
 
         #"fullscreen" doesn't always work, depending on the WM.
         #This is a workaround.
@@ -403,6 +404,7 @@ class KiLauncher(QTabWidget):
         for name, process in self.procs.items():
             process.close()
         super(KiLauncher, self).close()
+        sys.exit()
 
     def init_tabs(self):
         """Populate each tab with a LauncherPane of Launchers."""
@@ -450,5 +452,6 @@ if __name__ == '__main__':
     with open(config_file, 'r') as c:
         config = yaml.safe_load(c)
     l = KiLauncher(config, stylesheet=args.stylesheet)
+
     l.show()
     app.exec_()
