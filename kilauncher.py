@@ -339,7 +339,7 @@ class KiLauncher(QTabWidget):
             | Qt.WindowStaysOnBottomHint
             | Qt.FramelessWindowHint
         )
-        self.setAttribute(Qt.WA_X11NetWmWindowTypeMenu, True)
+        self.setAttribute(Qt.WA_X11NetWmWindowTypeDesktop)
         #"fullscreen" doesn't always work, depending on the WM.
         #This is a workaround.
         self.resize(qApp.desktop().availableGeometry().size())
