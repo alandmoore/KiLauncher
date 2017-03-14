@@ -197,6 +197,9 @@ class LaunchButton(QPushButton):
         We're going to strip these out, because they have no meaning in the
         context of a button-push.
         """
+
+        # set the working directory to ~
+        os.chdir(os.path.expanduser('~'))
         self.command = ' '.join(
             x for x in self.command.split()
             if x not in ('%f', '%F', '%u', '%U')
