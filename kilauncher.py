@@ -334,12 +334,16 @@ class KiLauncher(QTabWidget):
         #Ideally, the menu should be full screen,
         # but always stay beneath other windows
         self.setWindowState(Qt.WindowFullScreen)
+        print(self.windowFlags())
         self.setWindowFlags(
-            self.windowFlags()
-            | Qt.WindowStaysOnBottomHint
-            | Qt.FramelessWindowHint
+            Qt.SubWindow  # Prevents taskbar entry
+            | Qt.WindowStaysOnBottomHint  # Probably unnecessary...
+            | Qt.FramelessWindowHint  # Prevents window decorations
         )
+        # Put KiLauncher on bottom and prevent it covering other windows
         self.setAttribute(Qt.WA_X11NetWmWindowTypeDesktop)
+        self.setAttribute(Qt.WA_X11DoNotAcceptFocus)
+
         #"fullscreen" doesn't always work, depending on the WM.
         #This is a workaround.
         self.resize(qApp.desktop().availableGeometry().size())
