@@ -6,11 +6,21 @@ Copyright 2012
 Released under the GNU GPL v3
 """
 
+import sys
+import glob
+import yaml
+import os
+import argparse
+import struct
+
+from xdg.DesktopEntry import DesktopEntry
+
 while True:
     try:
         from PyQt5.QtCore import *
         from PyQt5.QtGui import *
         from PyQt5.QtWidgets import *
+        from PyQt5.QtX11Extras import QX11Info
         print("Using PyQt5")
         break
     except ImportError:
@@ -33,14 +43,6 @@ while True:
         print("No QT bindings found.  Exiting.")
         exit()
         pass
-
-from xdg.DesktopEntry import DesktopEntry
-
-import sys
-import glob
-import yaml
-import os
-import argparse
 
 
 def recursive_find(rootdir, myfilename):
@@ -122,7 +124,8 @@ class LaunchButton(QPushButton):
                 sys.stderr.write(
                     "Read access denied on manually-specified "
                     "desktop file {}.  Button may be missing data.\n"
-                    .format(desktop_file))
+                    .format(desktop_file)
+                )
 
         # This allows for overriding the settings in DesktopEntry
         self.name = kwargs.get("name", self.name)
@@ -334,13 +337,13 @@ class KiLauncher(QTabWidget):
                 .format(self.stylesheet))
             self.stylesheet = None
 
-        #Ideally, the menu should be full screen,
+        # Ideally, the menu should be full screen,
         # but always stay beneath other windows
         self.setWindowState(Qt.WindowFullScreen)
         print(self.windowFlags())
         self.setWindowFlags(
-            Qt.SubWindow  # Prevents taskbar entry
-            | Qt.WindowStaysOnBottomHint  # Probably unnecessary...
+            Qt.Window
+            #| Qt.WindowStaysOnBottomHint  # Probably unnecessary...
             | Qt.FramelessWindowHint  # Prevents window decorations
         )
         # Put KiLauncher on bottom and prevent it covering other windows
@@ -348,8 +351,8 @@ class KiLauncher(QTabWidget):
         self.setAttribute(Qt.WA_X11DoNotAcceptFocus)
         self.setAttribute(Qt.WA_DeleteOnClose)
 
-        #"fullscreen" doesn't always work, depending on the WM.
-        #This is a workaround.
+        # "fullscreen" doesn't always work, depending on the WM.
+        # This is a workaround.
         self.resize(qApp.desktop().availableGeometry().size())
 
         # Setup the appearance
@@ -368,11 +371,11 @@ class KiLauncher(QTabWidget):
             self.layout().addWidget(
                 QLabel("No tabs were configured.  "
                        "Please check your configuration file."))
-        #Since tabs are not dynamic, just hide them if there's only one.
+        # Since tabs are not dynamic, just hide them if there's only one.
         show_tabbar = len(self.tabs) > 1
         self.tabBar().setVisible(show_tabbar)
 
-        #Quit button
+        # Quit button
         if (config.get("show_quit_button")):
             self.quit_button = QPushButton(
                 config.get("quit_button_text") or "X", parent=self)
@@ -394,7 +397,7 @@ class KiLauncher(QTabWidget):
     def command_error(self, error):
         """Called when an autostart has an error"""
         proc = self.sender()
-        command = [k for k, v in self.procs.iteritems() if v == proc][0]
+        command = [k for k, v in self.procs.items() if v == proc][0]
         sys.stderr.write(
             """Command "{}" failed with error: {}. """.format(command, error))
 
@@ -433,17 +436,22 @@ if __name__ == '__main__':
             config_file = config_location
     app = QApplication(sys.argv)
     parser = argparse.ArgumentParser()
-    parser.add_argument("-c", "--config",
-                        action="store",
-                        dest="config",
-                        default=None,
-                        help="The configuration file to use.")
-    parser.add_argument("-s",
-                        "--stylesheet",
-                        action="store",
-                        dest="stylesheet",
-                        default=None,
-                        help="Override the stylesheet in the config file.")
+    parser.add_argument(
+        "-c",
+        "--config",
+        action="store",
+        dest="config",
+        default=None,
+        help="The configuration file to use."
+    )
+    parser.add_argument(
+        "-s",
+        "--stylesheet",
+        action="store",
+        dest="stylesheet",
+        default=None,
+        help="Override the stylesheet in the config file."
+    )
     args = parser.parse_args()
     config_file = args.config or os.path.expanduser(config_file)
     if not config_file:
@@ -452,6 +460,5 @@ if __name__ == '__main__':
     with open(config_file, 'r') as c:
         config = yaml.safe_load(c)
     l = KiLauncher(config, stylesheet=args.stylesheet)
-
     l.show()
     app.exec_()
