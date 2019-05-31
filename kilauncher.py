@@ -93,22 +93,6 @@ def icon_anyway_you_can(icon_name, recursive_search=True):
 # GUI classes #
 ###############
 
-class KiLabel(qtw.QLabel):
-    """A label class with additional styling capabilites
-
-    Experimental, not yet in use.
-    """
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        # Doesn't work, because stylesheets don't update the palette
-        color = self.palette().color(qtg.QPalette.WindowText)
-        outline_color = "black" if color.lightness() > 128 else "white"
-
-        ds = qtw.QGraphicsDropShadowEffect(blurRadius=4, color=qtg.QColor(outline_color), xOffset=0, yOffset=0)
-        self.setGraphicsEffect(ds)
-
 class LaunchButton(qtw.QPushButton):
     """ This is the actual button you push to launch the program.
     """
@@ -153,12 +137,12 @@ class LaunchButton(qtw.QPushButton):
         leftlayout = qtw.QVBoxLayout()
 
         # The button's title
-        title = qtw.Label(self.name)
+        title = qtw.QLabel(self.name)
         title.setObjectName("LaunchButtonTitle")
         leftlayout.addWidget(title)
 
         # The button's descriptive comment
-        comment = qtw.Label(self.comment)
+        comment = qtw.QLabel(self.comment)
         comment.setSizePolicy(
             qtw.QSizePolicy.Expanding,
             qtw.QSizePolicy.Expanding
