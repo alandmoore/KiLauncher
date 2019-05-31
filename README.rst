@@ -44,8 +44,8 @@ What KiLauncher is NOT
 Requirements
 ============
 
-- python (should work with python 3.x or any recent python 2.x)
-- PyQt4, PyQt5, or PySide
+- Python 3
+- PyQt5
 - python-yaml
 - python-xdg
 - python-argparse
