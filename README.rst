@@ -134,7 +134,7 @@ Stylesheet
 
 The stylesheet.css file is where the style info is kept.  It uses QT Stylesheet code, NOT regular CSS.  It's close, but the former is a subset so not everything works, and some things don't work like you'd expect.
 
-The included example stylesheets should give you a good starting point for styling the application.  To learn more about QT stylesheets and what's supported, see http://qt-project.org/doc/qt-4.8/stylesheet-reference.html.
+The included example stylesheets should give you a good starting point for styling the application.  To learn more about QT stylesheets and what's supported, see https://doc.qt.io/qt-5/stylesheet-reference.html.
 
 
 Command line options
@@ -142,12 +142,17 @@ Command line options
 
 The current command line options available are:
 
-================ =============================================================
-Switch           Description
-================ =============================================================
--c, --config     Specify a configuration file to use
--s, --stylesheet Override the stylesheet in the config file (nice for testing)
-================ =============================================================
+==================  ===============================================================
+Switch              Description
+==================  ===============================================================
+-h, --help          Show help text
+-c, --config        Specify a configuration file to use
+-s, --stylesheet    Override the stylesheet in the config file
+--launcher-size     Size of launcher buttons in pixels (WxH), e.g. "240x120"
+--icon-size         Size of icons in launcher buttons in pixels (WxH), e.g. "64x64"
+--icon-theme        Icon theme to pull icons from.  Works on Linux only
+-b, --quit-button   If 'True', then show quit button.  If 'False', hide it.
+==================  ===============================================================
 
 
 How I'd likely use it
