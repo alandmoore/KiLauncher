@@ -2,7 +2,6 @@
 # Utility Functions #
 #####################
 
-import os
 import sys
 import re
 import datetime
@@ -59,11 +58,14 @@ def icon_anyway_you_can(icon_name, recursive_search=True):
         debug(
             """Warning: had to recursively search for icon "{}".
             Please set a full path to the correct file to reduce startup time.
-            """.format(icon_name))
-        directories = ["/usr/share/pixmaps",
-                       "/usr/share/icons",
-                       "/usr/share/icons/hicolor",
-                       "/usr/share/" + icon_name]
+            """.format(icon_name)
+        )
+        directories = [
+            "/usr/share/pixmaps",
+            "/usr/share/icons",
+            "/usr/share/icons/hicolor",
+            "/usr/share/{}".format(icon_name)
+        ]
         extensions = [
             "", "png", "xpm", "svg", "jpg", "jpeg",
             "bmp", "tiff", "tif", "ico"
@@ -72,6 +74,7 @@ def icon_anyway_you_can(icon_name, recursive_search=True):
             "{}.{}".format(icon_name, extension)
             for extension in extensions
         ]
+
         for directory in directories:
             for filename in possible_filenames:
                 # strip path elements from filename
@@ -84,6 +87,5 @@ def icon_anyway_you_can(icon_name, recursive_search=True):
             if icon:
                 break
         if not icon:
-            debug(
-                """Couldn't find an icon for "{}".""".format(icon_name))
+            debug("Couldn't find an icon for \"{}\".".format(icon_name))
     return icon or qtg.QIcon()

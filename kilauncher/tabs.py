@@ -40,7 +40,6 @@ class KiLauncherTabs(qtw.QTabWidget):
             qtg.QIcon.setThemeName(self.config.icon_theme)
 
         # Set up the tabs
-
         if self.config.tabs_and_launchers:
             self.init_tabs()
         else:
@@ -56,12 +55,13 @@ class KiLauncherTabs(qtw.QTabWidget):
 
         # Quit button
         if (self.config.show_quit_button):
-            self.quit_button = qtw.QPushButton(
-                self.config.quit_button_text or "❌", parent=self)
+            self.quit_button = qtw.QPushButton(self.config.quit_button_text)
             self.quit_button.setObjectName("QuitButton")
             if show_tabbar:
                 self.setCornerWidget(self.quit_button)
             else:
+                # if we aren't showing the tab bar,
+                # add the button to the widget in tab 0
                 self.widget(0).description_layout.addWidget(self.quit_button)
             self.quit_button.clicked.connect(self.close)
 
@@ -92,7 +92,6 @@ class KiLauncherTabs(qtw.QTabWidget):
     def init_tabs(self):
         """Populate each tab with a LauncherPane of Launchers."""
         for tabordinal, launchers in enumerate(self.config.tabs_and_launchers):
-            launchers.aggressive_icon_search = self.config.aggressive_icon_search
             lm = LauncherMenu(launchers)
             launcher_name = launchers.name
             if launchers.icon:
