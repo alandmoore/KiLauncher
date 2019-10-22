@@ -2,17 +2,21 @@ import os
 import sys
 import argparse
 import yaml
+from pathlib import Path
 from PyQt5 import QtWidgets as qtw
 from .tabs import KiLauncherTabs
+from .config import KiLauncherConfig
+from . import utils
 
 
 class KiLauncherApp(qtw.QApplication):
 
     # List of places to search for the config file
+    # First location gets priority
     config_locations = [
-        '/etc/kilauncher/kilauncher.yaml',
-        '/etc/kilauncher.yaml',
-        '~/.kilauncher.yaml'
+        Path('~/.kilauncher.yaml').expanduser(),
+        Path('/etc/kilauncher.yaml'),
+        Path('/etc/kilauncher/kilauncher.yaml')
     ]
 
     def __init__(self):
@@ -20,8 +24,9 @@ class KiLauncherApp(qtw.QApplication):
 
         config_file = ''
         for config_location in self.config_locations:
-            if os.path.exists(os.path.expanduser(config_location)):
+            if config_location.exists():
                 config_file = config_location
+                break
 
         # Setup arguments
         parser = argparse.ArgumentParser()
@@ -33,20 +38,25 @@ class KiLauncherApp(qtw.QApplication):
             default=None,
             help="The configuration file to use."
         )
-        parser.add_argument(
-            "-s",
-            "--stylesheet",
-            action="store",
-            dest="stylesheet",
-            default=None,
-            help="Override the stylesheet in the config file."
-        )
+        for option, opt_data in KiLauncherConfig.options.items():
+            if opt_data.get('switches'):
+                parser.add_argument(
+                    *opt_data.get('switches'),
+                    action=opt_data.get('action', 'store_true'),
+                    default=opt_data.get('default'),
+                    dest=option
+                )
         args = parser.parse_args()
-        config_file = args.config or os.path.expanduser(config_file)
-        if not config_file:
-            sys.stderr.write("No config file found or specified; exiting")
+        config_file = (
+            Path(args.config).expanduser()
+            if args.config
+            else config_file
+        )
+        if not config_file or not config_file.exists():
+            utils.debug("No config file found or specified; exiting")
             sys.exit(1)
-        with open(config_file, 'r') as c:
-            config = yaml.safe_load(c)
-        self.launcher = KiLauncherTabs(config, stylesheet=args.stylesheet)
+        file_config = yaml.safe_load(config_file.read_text())
+        config = KiLauncherConfig(file_config, vars(args))
+        utils.debug(config)
+        self.launcher = KiLauncherTabs(config)
         self.launcher.show()

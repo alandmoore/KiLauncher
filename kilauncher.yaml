@@ -36,7 +36,7 @@ quit_button_text: "Quit this program"
 # It also vastly increases start time, especially on slow systems.
 # Default: False
 
-# aggressive_icon_search: True
+aggressive_icon_search: True
 
 
 # The "autostart" feature lets you specify some commands to run whenever KiLauncher is launched.
@@ -57,9 +57,9 @@ tabs_and_launchers:
   1:
     name: "Example Configuration"
     #It can have some descriptive text, which will be displayed above the launchers
-    description: "This tab contains a (fairly useless) example configuration designed to show all the configuration options.  
+    description: "This tab contains a (fairly useless) example configuration designed to show all the configuration options.
     <br/>You'll almost certainly want to edit the configuration file to put in something useful."
-    
+
     #It can also have an icon, which will appear in the tab
     icon: "web-browser"
     # For this tab, create a list of launchers.
@@ -131,7 +131,7 @@ tabs_and_launchers:
     desktop_path: "/usr/share/applications/"
     description: "These are the multimedia applications installed on your system."
     categories: ["audiovideo"]
-    
+
 # The system can work with large lists of programs too, though it seems to defeat the purpose (uncomment these lines to see it)
 
 #  4:
