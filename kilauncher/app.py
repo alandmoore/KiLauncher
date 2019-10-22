@@ -1,4 +1,3 @@
-import os
 import sys
 import argparse
 import yaml
@@ -44,6 +43,7 @@ class KiLauncherApp(qtw.QApplication):
                     *opt_data.get('switches'),
                     action=opt_data.get('action', 'store_true'),
                     default=opt_data.get('default'),
+                    choices=opt_data.get('choices'),
                     dest=option
                 )
         args = parser.parse_args()

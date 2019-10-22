@@ -153,6 +153,13 @@ class KiLauncherConfig:
             "default": "Quit this program"
         },
         "show_quit_button": {
+            "switches": ('-b', '--quit-button'),
+            "action": "store",
+            "help": "Show the quit button to exit the menu",
+            "transform": (
+                lambda x: x.lower() != 'false' if isinstance(x, str) else x
+            ),
+            "choices": ["True", "False"],
             "default": False
         },
         "autostart": {
