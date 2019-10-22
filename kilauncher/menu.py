@@ -39,7 +39,9 @@ class LauncherMenu(qtw.QWidget):
         # Of course, if that's zero (if the launcher is actually wider
         # than the viewport) make it 1
         screen_width = qtw.qApp.desktop().availableGeometry().width()
-        self.default_columns = (screen_width // self.config.launcher_size[0]) or 1
+        self.default_columns = (
+            (screen_width // self.config.launcher_size[0]) or 1
+        )
 
         self.columns = self.config.launchers_per_row
         self.current_coordinates = [0, 0]
