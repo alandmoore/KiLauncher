@@ -103,9 +103,8 @@ class TabConfig:
             in_categories = set(button_config.categories) & categories
             if (  # Filter categories if we've defined them
                     not categories or in_categories
-                ):
-                    self.add_launcher(button_config)
-
+            ):
+                self.add_launcher(button_config)
 
     def add_launcher(self, buttonconfig):
         self.launchers.append(buttonconfig)
@@ -188,7 +187,6 @@ class KiLauncherConfig:
                 "Using default."
                 .format(self.stylesheet))
             self.stylesheet = None
-
 
     def _build_tabs_and_launchers(self):
         """Take the dicts and build objects"""
