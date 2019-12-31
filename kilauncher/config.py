@@ -70,6 +70,14 @@ class TabConfig:
 
         self.add_desktop_path()
 
+    def has_button(self, button_config):
+        """Check if we already have the given ButtonConfig based on name & command"""
+
+        return (button_config.name, button_config.command) in [
+            (x.name, x.command) for x in self.launchers or []
+        ]
+
+
     def add_desktop_path(self):
         """Add launchers to this config from .desktop files in a given path."""
         if not self.desktop_path:
@@ -102,7 +110,8 @@ class TabConfig:
             )
             in_categories = set(button_config.categories) & categories
             if (  # Filter categories if we've defined them
-                    not categories or in_categories
+                    (not categories or in_categories)
+                    and not self.has_button(button_config)
             ):
                 self.add_launcher(button_config)
 
@@ -143,7 +152,7 @@ class KiLauncherConfig:
             "default": None
         },
         "tabs_and_launchers": {
-            "default": []
+            "default": dict()
         },
         "aggressive_icon_search": {
             "default": False
