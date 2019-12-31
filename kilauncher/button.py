@@ -19,6 +19,9 @@ class LaunchButton(qtw.QPushButton):
         self.comment = self.config.comment
         self.icon = self.config.icon
         self.command = self.config.command
+        self.process = None
+        self.error_log = list()
+        self.output_log = list()
 
         # Create the layouts and widgets to hold the information
         toplayout = qtw.QHBoxLayout()
@@ -70,14 +73,27 @@ class LaunchButton(qtw.QPushButton):
         """Enable the button widget"""
         self.setDisabled(False)
 
-    def enable_with_error(self, error):
+    def enable_with_error(self, error_code):
         """Enable the button, but display an error."""
         self.setDisabled(False)
+        print(self.error_log)
+        print(self.output_log)
+
         qtw.QMessageBox.critical(
             None,
             "Command Failed!",
             "Sorry, this program isn't working!"
         )
+
+    def log_error(self):
+        if self.process:
+            error = bytes(self.process.readAllStandardError())
+            self.error_log.append(error.decode('utf-8'))
+
+    def log_output(self):
+        if self.process:
+            output = bytes(self.process.readAllStandardOutput())
+            self.output_log.append(output.decode('utf-8'))
 
     def callback(self):
         """Run the button's callback function
@@ -90,16 +106,24 @@ class LaunchButton(qtw.QPushButton):
         We're going to strip these out, because they have no meaning in the
         context of a button-push.
         """
+        self.error_log.clear()
+        self.output_log.clear()
 
         self.command = ' '.join(
             x for x in self.command.split()
             if x not in ('%f', '%F', '%u', '%U')
         )
-        self.p = qtc.QProcess(workingDirectory='~')
-        self.p.finished.connect(self.enable)
-        self.p.error.connect(self.enable_with_error)
-        self.p.start(self.command)
-        if not self.p.state() == qtc.QProcess.NotRunning:
+        self.process = qtc.QProcess()
+        # cannot be a kwarg
+        self.process.setWorkingDirectory(qtc.QDir.homePath())
+        self.process.finished.connect(self.enable)
+        self.process.errorOccurred.connect(self.enable_with_error)
+        # This should log standard error and standard output
+        # Doesn't always catch stuff though.
+        self.process.readyReadStandardError.connect(self.log_error)
+        self.process.readyReadStandardOutput.connect(self.log_output)
+        self.process.start(self.command)
+        if not self.process.state() == qtc.QProcess.NotRunning:
             # Disable the button to prevent users clicking
             # 200 times waiting on a slow program.
             self.setDisabled(True)
