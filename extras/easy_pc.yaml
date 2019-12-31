@@ -17,15 +17,17 @@ tabs_and_launchers:
     name: "Internet"
     description: "Applications for utilizing the Internet."
     desktop_path: "/usr/share/applications/"
-    categories: ["instantmessaging", "email", "webbrowser"]
+    categories: ["instantmessaging", "email", "webbrowser", "network"]
     launcher_size: 240x120
+    launchers_per_row: 4
 
   2:
     name: "Office"
     description: "Applications for productivity and office work."
     desktop_path: "/usr/share/applications/"
-    categories: ["office"]
+    categories: ["office", "graphics", "education"]
     launcher_size: 240x120
+    launchers_per_row: 4
 
   3:
     name: "Games"
@@ -33,6 +35,7 @@ tabs_and_launchers:
     desktop_path: "/usr/share/applications"
     categories: ["game"]
     launcher_size: 240x120
+    launchers_per_row: 4
 
   4:
     name: "Multimedia"
@@ -40,3 +43,11 @@ tabs_and_launchers:
     desktop_path: "/usr/share/applications"
     categories: ["audiovideo"]
     launcher_size: 240x120
+    launchers_per_row: 4
+
+  5:
+    name: "Settings"
+    description: "Configure your computer"
+    desktop_path: "/usr/share/applications"
+    categories: ["Settings", "Utility", "System"]
+    launchers_per_row: 4
