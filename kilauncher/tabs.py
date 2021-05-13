@@ -68,7 +68,7 @@ class KiLauncherTabs(qtw.QTabWidget):
         # Run the "autostart" commands
         self.procs = {}
         for command in self.config.autostart:
-            self.procs[command] = qtw.QProcess()
+            self.procs[command] = qtc.QProcess()
             self.procs[command].start(command)
             self.procs[command].error.connect(self.command_error)
 
