@@ -50,7 +50,8 @@ class KiLauncherTabs(qtw.QTabWidget):
                     "Please check your configuration file."
                 ))
         # Since tabs are not dynamic, just hide them if there's only one.
-        show_tabbar = len(self.config.tabs_and_launchers) > 1
+        # But always show tabs if show_quit_button=True
+        show_tabbar = (len(self.config.tabs_and_launchers) > 1) or self.config.show_quit_button
         self.tabBar().setVisible(show_tabbar)
 
         # Quit button
